@@ -42,10 +42,6 @@ public class LoginUserCommandHandler : IRequestHandler<LoginUserCommand, Result<
         if (!result.IsSuccess)
             return Result<AuthResponse>.Failed(ErrorCode.InternalServerError, "Ошибка генерации токена");
 
-        return Result<AuthResponse>.Success(new AuthResponse
-        {
-            JwtToken = result.Value,
-            ExpiresAt = DateTime.UtcNow.AddHours(1)
-        });
+        return result;
     }
 }

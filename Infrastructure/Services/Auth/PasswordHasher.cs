@@ -14,23 +14,13 @@ namespace Infrastructure.Services.Auth
         private const int MemoryCostKb = 64 * 1024;
         private const int Iterations = 3;
         private const int Parallelism = 4;
-        private readonly byte[]? _pepper;
-
-        public PasswordHasher(IConfiguration config)
-        {
-            var pepperBase64 = config["Password:Pepper"];
-            _pepper = string.IsNullOrEmpty(pepperBase64) ?
-                throw new ArgumentNullException("Password:Pepper пустой в конфигурации") :
-                Convert.FromBase64String(pepperBase64);
-        }
-
         public Result<string> Hash(string password)
         {
             try
             {
                 var salt = RandomNumberGenerator.GetBytes(SaltLength);
-                var pwdBytes = Encoding.UTF8.GetBytes(password);
-                var argon2 = new Argon2id(_pepper != null ? Combine(pwdBytes, _pepper) : pwdBytes)
+                var passwordBytes = Encoding.UTF8.GetBytes(password);
+                var argon2 = new Argon2id(passwordBytes)
                 {
                     Salt = salt,
                     DegreeOfParallelism = Parallelism,
@@ -47,7 +37,6 @@ namespace Infrastructure.Services.Auth
                 return Result<string>.Failed(ErrorCode.InternalServerError, "Ошибка хеширования");
             }
         }
-
         public Result Verify(string password, string hash)
         {
             if (string.IsNullOrEmpty(hash))
@@ -62,7 +51,7 @@ namespace Infrastructure.Services.Auth
                 var salt = Convert.FromBase64String(parts[0]);
                 var hashBytes = Convert.FromBase64String(parts[1]);
                 var pwdBytes = Encoding.UTF8.GetBytes(password);
-                var argon2 = new Argon2id(_pepper != null ? Combine(pwdBytes, _pepper) : pwdBytes)
+                var argon2 = new Argon2id(pwdBytes)
                 {
                     Salt = salt,
                     DegreeOfParallelism = Parallelism,
@@ -80,7 +69,6 @@ namespace Infrastructure.Services.Auth
                 return Result.Failed(ErrorCode.BadRequest, "Пароль либо логин неверный");
             }
         }
-
         private static byte[] Combine(byte[] first, byte[] second)
         {
             var ret = new byte[first.Length + second.Length];

@@ -1,3 +1,4 @@
+using Application.Features.Auth.Login;
 using Domain.Abstractions.Result;
 using Domain.Entities;
 using Infrastructure.Abstractions.Interfaces.Auth;
@@ -21,7 +22,7 @@ public class JwtGenerator : IJwtGenerator
         _config = config;
         _key = _config["Jwt:Key"] ?? throw new ArgumentNullException("Jwt:Key пустой в конфигурации");
     }
-    public Result<string> GenerateToken(User user)
+    public Result<AuthResponse> GenerateToken(User user)
     {
         var claims = new[]
         {
@@ -36,11 +37,16 @@ public class JwtGenerator : IJwtGenerator
             expires: DateTime.UtcNow.AddMinutes(
                 int.Parse(_config["Jwt:Expires"] ?? "15")
             ),
+            audience: _config["Jwt:Audience"],
+            issuer: _config["Jwt:Issuer"],
             signingCredentials: creds
         );
 
-        return Result<string>.Success(
-            new JwtSecurityTokenHandler().WriteToken(token)
-        );
+        return Result<AuthResponse>.Success(new AuthResponse {
+            JwtToken = new JwtSecurityTokenHandler().WriteToken(token),
+            ExpiresAt = DateTime.UtcNow.AddMinutes(
+                (token.ValidTo - token.ValidFrom).TotalMinutes
+            )
+        });
     }
 }

@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using MediatR;
 using Application.Features.Auth.Login;
+using Microsoft.AspNetCore.Identity.Data;
 
 namespace API.Controllers
 {
@@ -18,9 +19,8 @@ namespace API.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] LoginRequest request)
+        public async Task<IActionResult> Login([FromBody] LoginUserCommand command)
         {
-            var command = new LoginCommand(request.Username, request.Password);
             var result = await _mediator.Send(command);
 
             if (result.IsSuccess)
