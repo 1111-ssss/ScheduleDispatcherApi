@@ -1,3 +1,5 @@
+using System.Net.NetworkInformation;
+
 namespace Domain.Abstractions.Result
 {
     public interface IResultBase
@@ -18,6 +20,8 @@ namespace Domain.Abstractions.Result
         }
         public static Result Success() => new();
         public static Result Failed(ErrorCode errorCode, string? message) => new(errorCode, message);
+
+        public static Result IsComplited() => Success();
     }
     public sealed class Result<T> : IResultBase
     {
@@ -38,5 +42,7 @@ namespace Domain.Abstractions.Result
         public static Result<T> Success(T value) => new(value);
         public static Result<T> Failed(ErrorCode errorCode, string message) => new(default!, errorCode, message);
         public static implicit operator Result(Result<T> result) => result.IsSuccess ? Result.Success() : Result.Failed(result.Error!.Value, result.Message);
+
+        public static Result<T> IsComplited(T value) => Success(value);
     }
 }
