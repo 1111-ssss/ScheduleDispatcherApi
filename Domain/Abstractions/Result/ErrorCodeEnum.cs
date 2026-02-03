@@ -43,4 +43,6 @@ public enum ErrorCode
     DatabaseError,
     [HttpStatusCode(500)]
     UnknownError,
+    [HttpStatusCode(500)]
+    TokenGenerationError,
 }
