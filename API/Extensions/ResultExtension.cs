@@ -5,18 +5,23 @@ public static class ResultExtensions
 {
     public static IActionResult ToActionResult(this IResultBase result)
     {
+        if (result.IsSuccess)
+            return new OkObjectResult(null);
+            
         if (!result.Error.HasValue)
-            return new BadRequestObjectResult(new { error = result.Message ?? "Bad request" });
+            return new BadRequestObjectResult(new { error = result.Message ?? "NoErrorCode" });
 
-        int code = (int)result.Error;
+        int statusCode = HttpStatusCodeAttribute.GetHttpStatusCode(result.Error.Value);
+        string statusCodeName = Enum.GetName(typeof(ErrorCode), result.Error.Value) ?? "Unknown";
+        string? resultMessage = result.Message;
 
-        return code switch
+        return statusCode switch
         {
-            400 => new BadRequestObjectResult(new { error = result.Message ?? "Bad request", code }),
-            401 => new UnauthorizedObjectResult(new { error = result.Message ?? "Unauthorized", code }),
-            404 => new NotFoundObjectResult(new { error = result.Message ?? "Not found", code }),
-            409 => new ConflictObjectResult(new { error = result.Message ?? "Conflict", code }),
-            _ => new ObjectResult(new { error = result.Message, code }) { StatusCode = code },
+            400 => new BadRequestObjectResult(new { error = statusCodeName, message = resultMessage }),
+            401 => new UnauthorizedObjectResult(new { error = statusCodeName, message = resultMessage }),
+            404 => new NotFoundObjectResult(new { error = statusCodeName, message = resultMessage }),
+            409 => new ConflictObjectResult(new { error = statusCodeName, message = resultMessage }),
+            _ => new ObjectResult(new { error = resultMessage }) { StatusCode = statusCode },
         };
     }
 
