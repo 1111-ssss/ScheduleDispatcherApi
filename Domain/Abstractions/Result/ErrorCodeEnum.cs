@@ -1,24 +1,44 @@
-namespace Domain.Abstractions.Result
+namespace Domain.Abstractions.Result;
+
+public enum ErrorCode
 {
-    public enum ErrorCode
-    {
-        Unknown = 0,
+    Unknown = 0,
 
-        // дефолтные коды ошибок
-        BadRequest = 400,
-        ValidationFailed = 422,
-        Unauthorized = 401,
-        Forbidden = 403,
-        NotFound = 404,
-        Conflict = 409,
-        TooManyRequests = 429,
-        InternalServerError = 500,
-        ServiceUnavailable = 503,
+    //Ошибки валидации (400 Bad Request)
+    [HttpStatusCode(400)]
+    BadRequest,
+    [HttpStatusCode(400)]
+    InvalidPassword,
+    [HttpStatusCode(400)]
+    InvalidUsername,
+    [HttpStatusCode(400)]
+    InvalidPagination,
 
-        // кастомные коды ошибок
-        // InvalidUsernameOrPassword = 1001,
-        // TokenExpired = 1002,
-        // UserNotFound = 1003,
-        // UserAlreadyExists = 1004,
-    }
+    //Ошибки авторизации (401 Unauthorized)
+    [HttpStatusCode(401)]
+    Unauthorized,
+
+    //Нет доступа (403 Forbidden)
+    [HttpStatusCode(403)]
+    Forbidden,
+
+    //Не найден (404 Not Found)
+    [HttpStatusCode(404)]
+    NotFound,
+    [HttpStatusCode(404)]
+    UserNotFound,
+
+    //Ошибки конфликтации (409 Conflict)
+    [HttpStatusCode(409)]
+    Conflict,
+    [HttpStatusCode(409)]
+    UserAlreadyExists,
+
+    //Ошибка сервера (500 Internal Server Error)
+    [HttpStatusCode(500)]
+    InternalServerError,
+    [HttpStatusCode(500)]
+    DatabaseError,
+    [HttpStatusCode(500)]
+    UnknownError,
 }
