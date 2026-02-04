@@ -1,4 +1,3 @@
-namespace Application
-{
-    public sealed class AssemblyMarker { }
-}
+namespace Application;
+
+public sealed class AssemblyMarker { }

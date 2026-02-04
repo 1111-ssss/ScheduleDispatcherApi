@@ -1,9 +1,8 @@
 using Ardalis.Specification;
 
-namespace Application.Abstractions.Repository
+namespace Application.Abstractions.Repository;
+
+public interface IBaseRepository<T> : IRepositoryBase<T> where T : class
 {
-    public interface IBaseRepository<T> : IRepositoryBase<T> where T : class
-    {
-        
-    }
+
 }
