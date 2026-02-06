@@ -55,7 +55,7 @@ public sealed class Result<T> : IResultBase
     )
     {
         Value = value;
-        Error = error ?? ErrorCode.Unknown;
+        Error = error;
         Message = message;
         Details = details;
     }
