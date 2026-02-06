@@ -14,6 +14,7 @@ using System.Text;
 using Application;
 using MediatR;
 using Application.Common.Behaviors;
+using API.Endpoints;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -34,7 +35,7 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 //Map controllers
-builder.Services.AddControllers();
+// builder.Services.AddControllers();
 
 //MediatR + FluentValidationBehavior
 builder.Services.AddMediatR(cfg =>
@@ -68,8 +69,8 @@ builder.Services.AddAuthentication(options =>
         ValidateAudience = true,
         ValidateLifetime = true,
         ValidateIssuerSigningKey = true,
-        ValidIssuer = builder.Configuration["JwtSettings:Issuer"],
-        ValidAudience = builder.Configuration["JwtSettings:Audience"],
+        ValidIssuer = jwtSettings["Issuer"],
+        ValidAudience = jwtSettings["Audience"],
         IssuerSigningKey = new SymmetricSecurityKey(key),
         ClockSkew = TimeSpan.Zero
     };
@@ -104,6 +105,7 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapControllers();
+// app.MapControllers();
+app.MapAuthEndpoints();
 
 app.Run();
