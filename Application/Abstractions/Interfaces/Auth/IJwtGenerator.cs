@@ -6,5 +6,5 @@ namespace Infrastructure.Abstractions.Interfaces.Auth;
 
 public interface IJwtGenerator
 {
-    Result<AuthResponse> GenerateToken(User user);
+    string? GenerateToken(User user);
 }

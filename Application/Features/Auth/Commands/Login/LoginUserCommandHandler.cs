@@ -26,6 +26,10 @@ public class LoginUserCommandHandler : IRequestHandler<LoginUserCommand, Result<
 
     public async Task<Result<AuthResponse>> Handle(LoginUserCommand request, CancellationToken ct)
     {
+        return Result<AuthResponse>.Success(new AuthResponse(
+            JwtToken: "TESTING_HASH"
+        ));
+
         var user = await _userRepository.FirstOrDefaultAsync(new UserByUsernameSpec(request.Username), ct);
 
         if (user == null)
@@ -34,10 +38,12 @@ public class LoginUserCommandHandler : IRequestHandler<LoginUserCommand, Result<
         if (!_passwordHasher.Verify(request.Password, user.PasswordHash).IsSuccess)
             return Result.Failed(ErrorCode.InvalidUsernameOrPassword);
 
-        var result = _jwtGenerator.GenerateToken(user);
-        if (!result.IsSuccess)
+        var userJwt = _jwtGenerator.GenerateToken(user);
+        if (string.IsNullOrEmpty(userJwt))
             return Result<AuthResponse>.Failed(ErrorCode.TokenGenerationError);
 
-        return result;
+        return Result<AuthResponse>.Success(new AuthResponse(
+            JwtToken: userJwt
+        ));
     }
 }

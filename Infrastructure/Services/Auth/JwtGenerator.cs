@@ -42,9 +42,7 @@ public class JwtGenerator : IJwtGenerator
         return Result<AuthResponse>.Success(new AuthResponse
         {
             JwtToken = new JwtSecurityTokenHandler().WriteToken(token),
-            ExpiresAt = DateTime.UtcNow.AddMinutes(
-                (token.ValidTo - token.ValidFrom).TotalMinutes
-            )
+            ExpiresAt = token.ValidTo
         });
     }
 }
