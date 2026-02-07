@@ -1,4 +1,5 @@
 using Application;
+using Application.Abstractions.Interfaces.Auth;
 using Application.Common.Behaviors;
 using FluentValidation;
 using Infrastructure.Abstractions.Interfaces.Auth;
@@ -11,6 +12,9 @@ public static class ServiceConfigurationExtensions
 {
     public static IServiceCollection AddCustomServices(this IServiceCollection services)
     {
+        // HttpContextAccessor
+        services.AddHttpContextAccessor();
+
         // MediatR + FluentValidationBehavior
         services.AddMediatR(cfg =>
         {
@@ -22,6 +26,7 @@ public static class ServiceConfigurationExtensions
         services.AddValidatorsFromAssemblyContaining<AssemblyMarker>();
 
         // Auth
+        services.AddScoped<ICurrentUserService, CurrentUserService>();
         services.AddScoped<IJwtGenerator, JwtGenerator>();
         services.AddScoped<IPasswordHasher, PasswordHasher>();
 
