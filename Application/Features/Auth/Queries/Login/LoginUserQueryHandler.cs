@@ -1,4 +1,5 @@
 using Application.Abstractions.Repository;
+using Application.Features.Auth.Common;
 using Domain.Abstractions.Result;
 using Domain.Entities;
 using Domain.Specifications.Auth;
