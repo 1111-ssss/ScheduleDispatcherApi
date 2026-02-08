@@ -1,8 +1,8 @@
-using Domain.Entities;
+using Application.Abstractions.Model.DTO;
 
 namespace Infrastructure.Abstractions.Interfaces.Auth;
 
 public interface IJwtGenerator
 {
-    string? GenerateToken(User user);
+    string? GenerateToken(GenerateTokenDTO dto);
 }

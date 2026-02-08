@@ -1,3 +1,4 @@
+using Application.Abstractions.Model.DTO;
 using Application.Abstractions.Repository;
 using Application.Features.Auth.Common;
 using Domain.Abstractions.Result;
@@ -34,7 +35,10 @@ public class LoginUserQueryHandler : IRequestHandler<LoginUserQuery, Result<Auth
         if (!_passwordHasher.Verify(request.Password, user.PasswordHash).IsSuccess)
             return Result.Failed(ErrorCode.InvalidUsernameOrPassword);
 
-        var userJwt = _jwtGenerator.GenerateToken(user);
+        var userJwt = _jwtGenerator.GenerateToken(
+            GenerateTokenDTO.FromUser(user)
+        );
+        
         if (string.IsNullOrEmpty(userJwt))
             return Result<AuthResponse>.Failed(ErrorCode.TokenGenerationError);
 
