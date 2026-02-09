@@ -7,7 +7,6 @@ public class User
     public string PasswordHash { get; set; } = default!;
     public string Role { get; set; } = default!;
 
-    private User() { }
     public static User Create(
         string username,
         string password,
