@@ -32,8 +32,9 @@ public class LoginUserQueryHandler : IRequestHandler<LoginUserQuery, Result<Auth
         if (user == null)
             return Result.Failed(ErrorCode.InvalidUsernameOrPassword);
 
-        if (!_passwordHasher.Verify(request.Password, user.PasswordHash).IsSuccess)
-            return Result.Failed(ErrorCode.InvalidUsernameOrPassword);
+        var hashResult = _passwordHasher.Verify(request.Password, user.PasswordHash);
+        if (!hashResult.IsSuccess)
+            return hashResult;
 
         var userJwt = _jwtGenerator.GenerateToken(
             GenerateTokenDTO.FromUser(user)

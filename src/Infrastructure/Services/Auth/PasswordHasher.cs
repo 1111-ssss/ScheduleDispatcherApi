@@ -39,13 +39,13 @@ public sealed class PasswordHasher : IPasswordHasher
     public Result Verify(string password, string hash)
     {
         if (string.IsNullOrEmpty(hash))
-            return Result.Failed(ErrorCode.BadRequest, "Хеш пустой");
+            return Result.Failed(ErrorCode.InvalidUsernameOrPassword, "Хеш пустой");
 
         try
         {
             var parts = hash.Split(':');
             if (parts.Length != 2)
-                return Result.Failed(ErrorCode.BadRequest, "Хеш не в формате salt:hash");
+                return Result.Failed(ErrorCode.InternalServerError, "Хеш не в формате salt:hash");
 
             var salt = Convert.FromBase64String(parts[0]);
             var hashBytes = Convert.FromBase64String(parts[1]);
@@ -61,18 +61,11 @@ public sealed class PasswordHasher : IPasswordHasher
             if (CryptographicOperations.FixedTimeEquals(computed, hashBytes))
                 return Result.Success();
 
-            return Result.Failed(ErrorCode.BadRequest, "Пароль либо логин неверный");
+            return Result.Failed(ErrorCode.InvalidUsernameOrPassword, "Пароль либо логин неверный");
         }
         catch
         {
-            return Result.Failed(ErrorCode.BadRequest, "Пароль либо логин неверный");
+            return Result.Failed(ErrorCode.InternalServerError, "Пароль либо логин неверный");
         }
-    }
-    private static byte[] Combine(byte[] first, byte[] second)
-    {
-        var ret = new byte[first.Length + second.Length];
-        Buffer.BlockCopy(first, 0, ret, 0, first.Length);
-        Buffer.BlockCopy(second, 0, ret, first.Length, second.Length);
-        return ret;
     }
 }

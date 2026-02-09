@@ -49,4 +49,6 @@ public enum ErrorCode
     UnknownError,
     [HttpStatusCode(500)]
     TokenGenerationError,
+    [HttpStatusCode(500)]
+    NoPasswordHash,
 }
