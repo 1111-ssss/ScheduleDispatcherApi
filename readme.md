@@ -1,60 +1,145 @@
 # ScheduleApi
 
-REST API сервис для управления расписанием колледжа. Проект предназначен для автоматизации работы диспетчера, синхронизации данных между старой legacy-системой и современной базой данных, а также предоставления актуального расписания клиентам.
+**REST API** для управления расписанием колледжа.  
+Микросервис предназначен для:
 
-## Архитектура и Стек
+- автоматизации работы диспетчера
+- периодической синхронизации данных из legacy-системы
+- предоставления актуального расписания студентам, преподавателям и мобильным/веб-клиентам
 
-Проект построен на принципах **Clean Architecture** в сочетании с **Vertical Slice Architecture**. Это позволяет изолировать бизнес-логику каждой функции и упростить поддержку кода.
+Проект построен как **микросервис** и работает в паре со вторым сервисом (обычно legacy-оберткой или административным API).  
+**Связанный репозиторий** (основной / legacy / админ-сервис):  
+[← Название и ссылка на второй микросервис →](https://github.com/ВАШ-ЮЗЕРНЕЙМ/ВАШ-РЕПОЗИТОРИЙ)
 
-* **Framework:** ASP.NET Core
-* **Data Access:**
-    * **Entity Framework Core:** Основная БД (PostgreSQL). Используется для управления данными расписания и расчасовки.
-    * **Dapper:** Read-only доступ к legacy БД (MS SQL Server) для эффективного импорта данных.
-* **Patterns & Libraries:** * **MediatR:** Реализация CQRS (команды и запросы внутри каждого слайса).
-    * **Ardalis.Result:** Единый формат ответов API и обработка ошибок.
-    * **FluentValidation:** Валидация входных моделей.
-* **Auth:** JWT Bearer Authentication (роль диспетчера).
+## Архитектура и ключевые принципы
 
----
+- **Clean Architecture** + **Vertical Slice Architecture**
+- **CQRS** через **MediatR**
+- **Minimal APIs** (ASP.NET Core)
+- Result-ориентированный подход вместо исключений
+- Полностью типизированные ответы API
+- Спецификации для выразительных и переиспользуемых запросов
 
-## Базы данных и Синхронизация
+## Технологический стек
+
+| Компонент | Используемая библиотека / технология | Назначение|
+|:-|:-|:-|
+| ASP.NET Core | 8.0 / 9.0 | Минимальные API, роутинг, middleware |
+| MediatR | MediatR | CQRS, команды и запросы |
+| Валидация | FluentValidation | Валидация входных моделей |
+| Результаты операций | Ardalis.Result (или FluentResults) | Единый тип результата вместо исключений |
+| Спецификации | Ardalis.Specification | Переиспользуемые, композируемые запросы |
+| Аутентификация | JWT Bearer | Токены для диспетчера и (опционально) клиентов |
+| Хеширование паролей | Argon2id | Безопасное хранение паролей диспетчеров |
+| База данных (основная) | PostgreSQL + EF Core | Хранение расписания, кабинетов, расчасовки |
+| База данных (legacy, read-only) | MS SQL Server + Dapper | Импорт справочников и старых данных |
+| Документация API | Swashbuckle (Swagger / OpenAPI) | Интерактивная документация и тестирование |
+
+## Структура проекта (Vertical Slice + Clean Architecture)
+src/
+├─ API/                        # Точка входа · Minimal APIs · конфигурация
+│  ├─ Endpoints/               # (может быть пусто — эндпоинты через extensions)
+│  ├─ Extensions/
+├─ Program.cs
+├─ appsettings*.json
+│  └─ Properties/launchSettings.json
+│
+├─ Application/                # Use-cases, handlers, валидация, behaviors
+│  └─ Features/                 # ← вертикальные срезы (по доменным возможностям)
+├─ Domain/                     # Сущности, value objects, ошибки, спецификации
+│  ├─ Entities/                # Group, Teacher, Subject, Classroom, ScheduleItem, Removal …
+│  └─ Specifications/
+└─ Infrastructure/             # Конкретные реализации
+   ├─ DataBase/
+   ├─ Services/
+   └─ UnitOfWork/
 
 
+## Базы данных и синхронизация
 
-Система оперирует двумя базами данных:
-1.  **Legacy (MS SQL Server):** Существующая база данных с общей информацией (Преподаватели, Специальности, Группы).
-2.  **Core DB (PostgreSQL):** Новая база данных сервиса. Здесь хранятся таблицы, помеченные на схеме розовым цветом: расписание, кабинеты, снятия и расчасовка.
+Система работает с **двумя** базами данных:
 
-**Особенности синхронизации:**
-API выполняет перенос данных из MS SQL в Core DB. Важной частью является миграция таблицы `Subject_Teacher` в новую БД для обеспечения ссылочной целостности и возможности редактирования связей без изменения legacy-системы.
+1. **Legacy DB** — MS SQL Server (только чтение)  
+   Содержит справочники: преподаватели, группы, специальности, предметы, связи Subject_Teacher.
 
----
+2. **Core DB** — PostgreSQL (чтение + запись)  
+   Хранит актуальное расписание, кабинеты, снятия, расчасовку, редактируемые связи предмет-преподаватель.
+
+**Синхронизация** выполняется по команде диспетчера (эндпоинт `/api/sync/trigger`).  
+Обычно запускается 1–2 раза в семестр или при значительных изменениях в legacy-системе.
 
 ## Эндпоинты API
 
-| Категория | Метод | Путь | Описание |
-| :- | :- | :- | :- |
-| **Auth** | POST | `/api/auth/login` | Аутентификация диспетчера и выдача токена |
-| **Sync** | POST | `/api/sync/trigger` | Запуск синхронизации данных из MS SQL в Core DB |
-| **Client** | GET | `/api/schedule/group/{id}` | Получение расписания для группы |
-| **Client** | GET | `/api/schedule/day/{date}` | Получение расписания на конкретную дату |
-| **Client** | GET | `/api/schedule/teacher/{id}` | Расписание для преподавателя |
-| **Client** | GET | `/api/schedule/week` | Расписание на неделю по параметру `date` |
-| **Admin** | GET | `/api/dictionary/all` | Список групп, специальностей, предметов и кабинетов (один JSON) |
-| **Admin** | GET | `/api/workload` | Получение данных таблиц `Schedule` и `Removal` (расчасовка) |
-| **Admin** | POST | `/api/workload/save` | Сохранение/обновление данных расчасовки и снятия |
-| **Admin** | POST | `/api/schedule/finalize` | Сохранение финального варианта расписания на день |
-| **Search** | GET | `/api/search` | Поиск по фильтру (преподаватель, группа, предмет и т.д.) |
+| Категория   | Метод | Путь                              | Описание                                                                 | Доступ             |
+|-------------|-------|-----------------------------------|--------------------------------------------------------------------------|--------------------|
+| Auth        | POST  | `/api/auth/login`                 | Аутентификация диспетчера → JWT-токен                                    | Public             |
+| Sync        | POST  | `/api/sync/trigger`               | Запуск полной синхронизации из legacy → core                             | Dispatcher (JWT)   |
+| Client      | GET   | `/api/schedule/group/{id}`        | Расписание группы (на сегодня / по дате / на неделю)                     | Public / JWT       |
+| Client      | GET   | `/api/schedule/day/{date}`        | Расписание на конкретный день (все группы)                               | Public / JWT       |
+| Client      | GET   | `/api/schedule/teacher/{id}`      | Расписание преподавателя                                                 | Public / JWT       |
+| Client      | GET   | `/api/schedule/week`              | Расписание на неделю (параметр `date`)                                   | Public / JWT       |
+| Admin       | GET   | `/api/dictionary/all`             | Полный справочник: группы, специальности, предметы, кабинеты             | Dispatcher (JWT)   |
+| Admin       | GET   | `/api/workload`                   | Текущие данные расчасовки и снятий                                       | Dispatcher (JWT)   |
+| Admin       | POST  | `/api/workload/save`              | Сохранение / обновление расчасовки и снятий                              | Dispatcher (JWT)   |
+| Admin       | POST  | `/api/schedule/finalize`          | Финализация расписания на день (блокировка редактирования)               | Dispatcher (JWT)   |
+| Search      | GET   | `/api/search`                     | Поиск по преподавателю / группе / предмету / кабинету и т.д.             | Public / JWT       |
 
----
+> Подробное описание параметров, форматов ответа и примеров запросов → **Swagger UI** после запуска.
 
-## Схема базы данных
+## Запуск проекта локально
 
-Согласно техническому заданию, сущности разделены по зонам ответственности:
-* **Core API Entities (Розовые на схеме):** `Classrooms`, `Schedule`, `Removal`, `Subject_Teacher_Schedule`, `Limitation_on_choice_of_Audience_Subject`.
-* **Legacy Entities (Белые на схеме):** `Group`, `Teacher`, `Subject`, `Specialty`, `Subject_Teacher`.
+### Требования
 
----
+- .NET 8 / .NET 9 SDK
+- PostgreSQL 15+
+- MS SQL Server (legacy) — хотя бы для чтения
 
-## Дизайн и UI
-Макеты интерфейса диспетчера доступны в Figma: [Настолка_Распес](https://www.figma.com/design/9gudUAUSsOtCZIeUJs1QfC/%D0%9D%D0%B0%D1%81%D1%82%D0%BE%D0%BB%D0%BA%D0%B0_%D0%A0%D0%B0%D1%81%D0%BF%D0%B5%D1%81)
+### Шаги
+
+1. Склонируйте репозиторий  
+   `git clone …`
+
+2. Настройте `appsettings.Development.json` / user-secrets
+
+```json
+{
+  "ConnectionStrings": {
+    "CoreDb":             "Host=localhost;Database=schedule_core;Username=…",
+    "LegacyDb":           "Server=…;Database=legacy;User Id=…;Password=…;"
+  },
+  "Jwt": {
+    "Key":                "очень-длинный-случайный-ключ-минимум-64-символа",
+    "Issuer":             "schedule-api",
+    "Audience":           "schedule-clients"
+  },
+  "Sync": {
+    "BatchSize":          500
+  }
+}
+```
+
+3. Примените миграции для Core DB
+dotnet ef database update --project src/Infrastructure --startup-project src/API
+4. Запустите
+dotnet run --project src/API
+
+Swagger → http://localhost:5000/swagger (или https://localhost:5001/swagger)
+
+## Полезные команды
+```bash
+# Сборка
+dotnet build
+
+# Тесты
+dotnet test
+
+# Новая миграция
+dotnet ef migrations add Name --project src/Infrastructure --startup-project src/API
+
+# Обновление БД
+dotnet ef database update   --project src/Infrastructure --startup-project src/API
+```
+
+## UI диспетчера
+Макет интерфейса (Figma):
+https://www.figma.com/design/9gudUAUSsOtCZIeUJs1QfC/Настолка_Распес
