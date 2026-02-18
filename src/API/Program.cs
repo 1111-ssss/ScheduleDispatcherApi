@@ -2,9 +2,6 @@ using API.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
-//Swagger
-builder.Services.AddCustomSwagger();
-
 //MediatR + FluentValidationBehavior + FluentValidation + Services
 builder.Services.AddCustomServices();
 

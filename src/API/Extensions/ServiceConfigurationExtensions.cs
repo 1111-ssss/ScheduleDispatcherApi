@@ -15,6 +15,9 @@ public static class ServiceConfigurationExtensions
         // HttpContextAccessor
         services.AddHttpContextAccessor();
 
+        // OpenApi
+        services.AddOpenApi();
+
         // MediatR + FluentValidationBehavior
         services.AddMediatR(cfg =>
         {

@@ -1,3 +1,5 @@
+using Scalar.AspNetCore;
+
 namespace API.Extensions;
 
 public static class MiddlewareConfigurationExtensions
@@ -6,11 +8,19 @@ public static class MiddlewareConfigurationExtensions
     {
         if (app.Environment.IsDevelopment())
         {
-            app.UseSwagger();
-            app.UseSwaggerUI(c =>
+            app.MapOpenApi();
+            app.MapScalarApiReference(options =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "ScheduleAPI v1");
-                c.RoutePrefix = string.Empty;
+                options
+                    .WithTitle("Schedule Dispatcher API")
+                    .WithTheme(ScalarTheme.Moon)
+                    .WithDefaultHttpClient(ScalarTarget.CSharp, ScalarClient.Fetch)
+                    .AddPreferredSecuritySchemes("Bearer")
+                    .AddHttpAuthentication("Bearer", auth =>
+                    {
+                        auth.Description = "Тут токен Bearer";
+                    });
+                options.Agent?.Disabled = true;
             });
         }
 
