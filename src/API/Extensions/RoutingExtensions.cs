@@ -8,5 +8,6 @@ public static class RoutingExtensions
     {
         app.MapAuthEndpoints();
         app.MapSyncEndpoints();
+        app.MapDispatcherEndpoints();
     }
 }
