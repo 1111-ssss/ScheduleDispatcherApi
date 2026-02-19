@@ -19,7 +19,7 @@ public static class AuthEndpoints
             .WithSummary("Вход в систему")
             .WithDescription("Позволяет пользователю войти в систему, предоставив имя пользователя и пароль. В случае успешной аутентификации возвращает JWT-токен для доступа к защищенным ресурсам API.")
             .Accepts<LoginUserQuery>("application/json")
-            .Produces<AuthResponse>(StatusCodes.Status200OK)
+            .Produces<AuthDTO>(StatusCodes.Status200OK)
             .Produces<ErrorResponse>(StatusCodes.Status400BadRequest)
             .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
@@ -28,7 +28,7 @@ public static class AuthEndpoints
             .WithSummary("Обновление токена")
             .WithDescription("Позволяет обновить JWT-токен, используя refresh-токен. В случае успешного обновления возвращает новый JWT-токен.")
             .Accepts<RefreshTokenQuery>("application/json")
-            .Produces<AuthResponse>(StatusCodes.Status200OK)
+            .Produces<AuthDTO>(StatusCodes.Status200OK)
             .Produces<ErrorResponse>(StatusCodes.Status400BadRequest)
             .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 

@@ -51,7 +51,7 @@ public static class DispatcherEndpoints
     }
     private static async Task<IResult> GetWorkloadAsync(
         [FromServices] IMediator _mediator,
-        [FromQuery] GetWorkloadQuery query
+        [AsParameters] GetWorkloadQuery query
     )
     {
         var result = await _mediator.Send(query);
