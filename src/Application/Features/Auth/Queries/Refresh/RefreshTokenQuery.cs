@@ -4,4 +4,4 @@ using MediatR;
 
 namespace Application.Features.Auth.Refresh;
 
-public record RefreshTokenQuery() : IRequest<Result<AuthResponse>>;
+public record RefreshTokenQuery() : IRequest<Result<AuthDTO>>;

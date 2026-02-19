@@ -9,7 +9,7 @@ using MediatR;
 
 namespace Application.Features.Auth.Login;
 
-public class LoginUserQueryHandler : IRequestHandler<LoginUserQuery, Result<AuthResponse>>
+public class LoginUserQueryHandler : IRequestHandler<LoginUserQuery, Result<AuthDTO>>
 {
     private readonly IBaseRepository<User> _userRepository;
     private readonly IJwtGenerator _jwtGenerator;
@@ -25,7 +25,7 @@ public class LoginUserQueryHandler : IRequestHandler<LoginUserQuery, Result<Auth
         _passwordHasher = passwordHasher;
     }
 
-    public async Task<Result<AuthResponse>> Handle(LoginUserQuery request, CancellationToken ct)
+    public async Task<Result<AuthDTO>> Handle(LoginUserQuery request, CancellationToken ct)
     {
         var user = await _userRepository.FirstOrDefaultAsync(new UserByUsernameSpec(request.Username), ct);
 
@@ -41,9 +41,9 @@ public class LoginUserQueryHandler : IRequestHandler<LoginUserQuery, Result<Auth
         );
         
         if (string.IsNullOrEmpty(userJwt))
-            return Result<AuthResponse>.Failed(ErrorCode.TokenGenerationError);
+            return Result<AuthDTO>.Failed(ErrorCode.TokenGenerationError);
 
-        return Result<AuthResponse>.Success(new AuthResponse(
+        return Result<AuthDTO>.Success(new AuthDTO(
             JwtToken: userJwt
         ));
     }

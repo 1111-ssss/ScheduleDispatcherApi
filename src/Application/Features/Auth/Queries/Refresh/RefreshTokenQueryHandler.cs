@@ -6,7 +6,7 @@ using MediatR;
 
 namespace Application.Features.Auth.Refresh;
 
-public class RefreshTokenQueryHandler : IRequestHandler<RefreshTokenQuery, Result<AuthResponse>>
+public class RefreshTokenQueryHandler : IRequestHandler<RefreshTokenQuery, Result<AuthDTO>>
 {
     private readonly IJwtGenerator _jwtGenerator;
     private readonly ICurrentUserService _currentUserService;
@@ -20,7 +20,7 @@ public class RefreshTokenQueryHandler : IRequestHandler<RefreshTokenQuery, Resul
         _currentUserService = currentUserService;
     }
 
-    public async Task<Result<AuthResponse>> Handle(RefreshTokenQuery request, CancellationToken ct)
+    public async Task<Result<AuthDTO>> Handle(RefreshTokenQuery request, CancellationToken ct)
     {
         if (string.IsNullOrEmpty(_currentUserService.JwtToken))
             return Result.Failed(ErrorCode.InvalidToken);
@@ -36,9 +36,9 @@ public class RefreshTokenQueryHandler : IRequestHandler<RefreshTokenQuery, Resul
             currentToken
         );
         if (string.IsNullOrEmpty(newJwtToken))
-            return Result<AuthResponse>.Failed(ErrorCode.TokenGenerationError);
+            return Result<AuthDTO>.Failed(ErrorCode.TokenGenerationError);
 
-        return Result<AuthResponse>.Success(new AuthResponse(
+        return Result<AuthDTO>.Success(new AuthDTO(
             JwtToken: newJwtToken
         ));
     }
