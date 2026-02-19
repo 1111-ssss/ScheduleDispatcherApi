@@ -25,6 +25,12 @@ public enum ErrorCode
     InvalidWorkload,
     [HttpStatusCode(400)]
     InvalidRemoval,
+    [HttpStatusCode(400)]
+    InvalidLessonName,
+    [HttpStatusCode(400)]
+    InvalidTeacherName,
+    [HttpStatusCode(400)]
+    InvalidSemester,
 
     //Ошибки авторизации (401 Unauthorized)
     [HttpStatusCode(401)]
