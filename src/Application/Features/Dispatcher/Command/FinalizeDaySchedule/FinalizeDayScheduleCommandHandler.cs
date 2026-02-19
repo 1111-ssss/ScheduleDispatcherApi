@@ -16,7 +16,7 @@ public class FinalizeDayScheduleCommandHandler : IRequestHandler<FinalizeDaySche
 
     public async Task<Result> Handle(FinalizeDayScheduleCommand command, CancellationToken ct)
     {
-        throw new NotImplementedException();
+        throw new NotImplementedException("Finalize Day Schedule еще не реализована");
 
         // return Result.Success();
     }
