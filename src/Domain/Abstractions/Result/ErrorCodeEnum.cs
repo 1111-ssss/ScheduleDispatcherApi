@@ -19,6 +19,12 @@ public enum ErrorCode
     InvalidGroupName,
     [HttpStatusCode(400)]
     InvalidDate,
+    [HttpStatusCode(400)]
+    InvalidWorkloadSummary,
+    [HttpStatusCode(400)]
+    InvalidWorkload,
+    [HttpStatusCode(400)]
+    InvalidRemoval,
 
     //Ошибки авторизации (401 Unauthorized)
     [HttpStatusCode(401)]
