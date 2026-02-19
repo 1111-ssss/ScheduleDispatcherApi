@@ -7,5 +7,6 @@ public static class RoutingExtensions
     public static void MapCustomRoutes(this WebApplication app)
     {
         app.MapAuthEndpoints();
+        app.MapSyncEndpoints();
     }
 }
