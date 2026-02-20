@@ -5,20 +5,18 @@
 
 - автоматизации работы диспетчера
 - периодической синхронизации данных из legacy-системы
-- предоставления актуального расписания студентам, преподавателям и мобильным/веб-клиентам
 
-Проект построен как **микросервис** и работает в паре со вторым сервисом (обычно legacy-оберткой или административным API).  
-**Связанный репозиторий** (основной / legacy / админ-сервис):  
-[← Название и ссылка на второй микросервис →](https://github.com/ВАШ-ЮЗЕРНЕЙМ/ВАШ-РЕПОЗИТОРИЙ)
+Проект построен как **микросервис** и работает в паре со вторым сервисом.  
+**Связанный репозиторий** (клиент-сервис):  
+[← Нажми →](https://github.com/StayNight-withMe/ShceduleClientApi)
 
 ## Архитектура и ключевые принципы
 
-- **Clean Architecture** + **Vertical Slice Architecture**
-- **CQRS** через **MediatR**
+- **Clean Architecture** + **Vertical Slice Architecture** *(гибрид)*
+- **CQRS** через библиотеку **MediatR**
 - **Minimal APIs** (ASP.NET Core)
-- Result-ориентированный подход вместо исключений
-- Полностью типизированные ответы API
-- Спецификации для выразительных и переиспользуемых запросов
+- **Result-ориентированный подход** для обработки бизнес-логики без исключений.
+- **Спецификации** для выразительных и переиспользуемых запросов
 
 ## Технологический стек
 
@@ -33,9 +31,10 @@
 | Хеширование паролей | Argon2id | Безопасное хранение паролей диспетчеров |
 | База данных (основная) | PostgreSQL + EF Core | Хранение расписания, кабинетов, расчасовки |
 | База данных (legacy, read-only) | MS SQL Server + Dapper | Импорт справочников и старых данных |
-| Документация API | Swashbuckle (Swagger / OpenAPI) | Интерактивная документация и тестирование |
+| Документация API | Scalar (OpenAPI) | Интерактивная документация и тестирование |
 
 ## Структура проекта (Vertical Slice + Clean Architecture)
+```
 src/
 ├─ API/                        # Точка входа · Minimal APIs · конфигурация
 │  ├─ Endpoints/               # (может быть пусто — эндпоинты через extensions)
@@ -53,7 +52,7 @@ src/
    ├─ DataBase/
    ├─ Services/
    └─ UnitOfWork/
-
+```
 
 ## Базы данных и синхронизация
 
@@ -70,21 +69,17 @@ src/
 
 ## Эндпоинты API
 
-| Категория   | Метод | Путь                              | Описание                                                                 | Доступ             |
-|-------------|-------|-----------------------------------|--------------------------------------------------------------------------|--------------------|
-| Auth        | POST  | `/api/auth/login`                 | Аутентификация диспетчера → JWT-токен                                    | Public             |
-| Sync        | POST  | `/api/sync/trigger`               | Запуск полной синхронизации из legacy → core                             | Dispatcher (JWT)   |
-| Client      | GET   | `/api/schedule/group/{id}`        | Расписание группы (на сегодня / по дате / на неделю)                     | Public / JWT       |
-| Client      | GET   | `/api/schedule/day/{date}`        | Расписание на конкретный день (все группы)                               | Public / JWT       |
-| Client      | GET   | `/api/schedule/teacher/{id}`      | Расписание преподавателя                                                 | Public / JWT       |
-| Client      | GET   | `/api/schedule/week`              | Расписание на неделю (параметр `date`)                                   | Public / JWT       |
-| Admin       | GET   | `/api/dictionary/all`             | Полный справочник: группы, специальности, предметы, кабинеты             | Dispatcher (JWT)   |
-| Admin       | GET   | `/api/workload`                   | Текущие данные расчасовки и снятий                                       | Dispatcher (JWT)   |
-| Admin       | POST  | `/api/workload/save`              | Сохранение / обновление расчасовки и снятий                              | Dispatcher (JWT)   |
-| Admin       | POST  | `/api/schedule/finalize`          | Финализация расписания на день (блокировка редактирования)               | Dispatcher (JWT)   |
-| Search      | GET   | `/api/search`                     | Поиск по преподавателю / группе / предмету / кабинету и т.д.             | Public / JWT       |
+| Категория | Метод | Путь | Принимает | Возвращает |
+|----------|--------|-------------------|-----------------|--------------------|
+| **Auth** | `POST` | `/api/auth/login` | `LoginUserQuery` | `AuthDTO` | 200, 400, 500 |
+| **Auth** | `POST` | `/api/auth/refresh` | `RefreshTokenQuery` | `AuthDTO` | 200, 400, 500 |
+| **Sync** | `POST` | `/api/sync` | — | — | 200, 500 |
+| **Dispatcher** | `GET` | `/api/dispatcher/get` | `GetWorkloadQuery` | `WorkloadSummaryDTO` | 200, 400, 500 |
+| **Dispatcher** | `POST` | `/api/dispatcher/save` | `SaveWorkloadCommand` | — | 200, 400, 500 |
+| **Dispatcher** | `POST` | `/api/dispatcher/finalize` | `FinalizeDayScheduleCommand` | — | 200, 400, 500 |
+| **Dispatcher** | `GET` | `/api/dispatcher/lessons` | — | `AllLessonsDTO` | 200, 500 |
 
-> Подробное описание параметров, форматов ответа и примеров запросов → **Swagger UI** после запуска.
+> Подробное описание параметров, форматов ответа и примеров запросов → **Scalar UI** после запуска.
 
 ## Запуск проекта локально
 
