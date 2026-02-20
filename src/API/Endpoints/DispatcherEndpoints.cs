@@ -20,6 +20,7 @@ public static class DispatcherEndpoints
             .WithName("Get Workload")
             .WithSummary("Запрос на получение расчасовки")
             .WithDescription("Позволяет получить расчасовку и снятие для предмета по группе, семестру и преподавателю. Возвращает расчасовку и снятие.")
+            .Accepts<GetWorkloadQuery>("application/json")
             .Produces<WorkloadSummaryDTO>(StatusCodes.Status200OK)
             .Produces<ErrorResponse>(StatusCodes.Status400BadRequest)
             .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
@@ -28,6 +29,7 @@ public static class DispatcherEndpoints
             .WithName("Save Workload")
             .WithSummary("Запрос на сохранение расчасовки")
             .WithDescription("Позволяет сохранить расчасовку и снятие для предмета по группе, семестру и преподавателю.")
+            .Accepts<SaveWorkloadCommand>("application/json")
             .Produces(StatusCodes.Status200OK)
             .Produces<ErrorResponse>(StatusCodes.Status400BadRequest)
             .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
@@ -36,6 +38,7 @@ public static class DispatcherEndpoints
             .WithName("Finalize Workload")
             .WithSummary("Запрос на сохранение расписания дня")
             .WithDescription("Позволяет сохранять расписание дня для группы на определенный день.")
+            .Accepts<FinalizeDayScheduleCommand>("application/json")
             .Produces(StatusCodes.Status200OK)
             .Produces<ErrorResponse>(StatusCodes.Status400BadRequest)
             .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
@@ -44,6 +47,7 @@ public static class DispatcherEndpoints
             .WithName("Get Lessons Info")
             .WithSummary("Запрос на получение информации о предметах")
             .WithDescription("Позволяет получить информацию о предметах, в каком семестре они проводятся, на каком курсу и списку групп.")
+            .Accepts<GetAllLessonsQuery>("application/json")
             .Produces<AllLessonsDTO>(StatusCodes.Status200OK)
             .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
