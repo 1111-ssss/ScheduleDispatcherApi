@@ -47,7 +47,6 @@ public static class DispatcherEndpoints
             .WithName("Get Lessons Info")
             .WithSummary("Запрос на получение информации о предметах")
             .WithDescription("Позволяет получить информацию о предметах, в каком семестре они проводятся, на каком курсу и списку групп.")
-            .Accepts<GetAllLessonsQuery>("application/json")
             .Produces<AllLessonsDTO>(StatusCodes.Status200OK)
             .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
