@@ -69,8 +69,8 @@ src/
 
 ## Эндпоинты API
 
-| Категория | Метод | Путь | Принимает | Возвращает |
-|----------|--------|-------------------|-----------------|--------------------|
+| Категория | Метод | Путь | Принимает | Возвращает | Коды ответов |
+|--|--|--|--|--|--|
 | **Auth** | `POST` | `/api/auth/login` | `LoginUserQuery` | `AuthDTO` | 200, 400, 500 |
 | **Auth** | `POST` | `/api/auth/refresh` | `RefreshTokenQuery` | `AuthDTO` | 200, 400, 500 |
 | **Sync** | `POST` | `/api/sync` | — | — | 200, 500 |
@@ -79,7 +79,7 @@ src/
 | **Dispatcher** | `POST` | `/api/dispatcher/finalize` | `FinalizeDayScheduleCommand` | — | 200, 400, 500 |
 | **Dispatcher** | `GET` | `/api/dispatcher/lessons` | — | `AllLessonsDTO` | 200, 500 |
 
-> Подробное описание параметров, форматов ответа и примеров запросов → **Scalar UI** после запуска.
+> Подробное описание параметров, форматов ответа и примеров запросов → **Scalar UI** (`/api/scalar`) после запуска.
 
 ## Запуск проекта локально
 
@@ -99,16 +99,13 @@ src/
 ```json
 {
   "ConnectionStrings": {
-    "CoreDb":             "Host=localhost;Database=schedule_core;Username=…",
-    "LegacyDb":           "Server=…;Database=legacy;User Id=…;Password=…;"
+    "DispatcherDb": "Host=localhost;Database=schedule_core;Username=…",
+    "LegacyDb": "Server=…;Database=legacy;User Id=…;Password=…;"
   },
   "Jwt": {
-    "Key":                "очень-длинный-случайный-ключ-минимум-64-символа",
-    "Issuer":             "schedule-api",
-    "Audience":           "schedule-clients"
-  },
-  "Sync": {
-    "BatchSize":          500
+    "Key": "очень-длинный-случайный-ключ-минимум-64-символа",
+    "Issuer": "schedule-api",
+    "Audience": "schedule-clients"
   }
 }
 ```
