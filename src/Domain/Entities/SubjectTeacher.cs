@@ -21,5 +21,5 @@ public partial class SubjectTeacher
 
     public virtual ICollection<SubjectTeacherSchedule> SubjectTeacherSchedules { get; set; } = new List<SubjectTeacherSchedule>();
 
-    public virtual ICollection<Subjectteachersemester> Subjectteachersemesters { get; set; } = new List<Subjectteachersemester>();
+    public virtual ICollection<SubjectTeacherSemester> Subjectteachersemesters { get; set; } = new List<SubjectTeacherSemester>();
 }
