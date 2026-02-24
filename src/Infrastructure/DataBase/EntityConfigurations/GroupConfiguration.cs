@@ -8,9 +8,9 @@ public class GroupConfiguration : IEntityTypeConfiguration<Group>
 {
     public void Configure(EntityTypeBuilder<Group> entity)
     {
-        entity.HasKey(e => e.CnG).HasName("Group_pkey");
+        entity.HasKey(e => e.CnG).HasName("group_pkey");
 
-        entity.ToTable("Group");
+        entity.ToTable("group");
 
         entity.Property(e => e.CnG)
             .HasMaxLength(4)
