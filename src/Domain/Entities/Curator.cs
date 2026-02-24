@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace Infrastructure.src.Domain.Entities;
+﻿namespace Infrastructure.src.Domain.Entities;
 
 public partial class Curator
 {
