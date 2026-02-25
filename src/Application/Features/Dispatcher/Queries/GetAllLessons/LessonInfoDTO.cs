@@ -4,5 +4,5 @@ public record LessonInfoDTO(
     string LessonName,
     int Semester,
     int Course,
-    List<string> Groups
+    Dictionary<string, List<string>> Groups
 );
