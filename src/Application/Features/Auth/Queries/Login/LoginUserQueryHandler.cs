@@ -1,5 +1,5 @@
 using Application.Abstractions.Model.DTO;
-using Application.Abstractions.Repository;
+using Application.Abstractions.Repository.Base;
 using Application.Features.Auth.Common;
 using Domain.Abstractions.Result;
 using Domain.Entities;

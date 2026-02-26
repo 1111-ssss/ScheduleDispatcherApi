@@ -1,7 +1,7 @@
 using Application.Abstractions.Interfaces.UnitOfWork;
-using Application.Abstractions.Repository;
+using Application.Abstractions.Repository.Base;
 using Infrastructure.DataBase.Context;
-using Infrastructure.DataBase.Repository;
+using Infrastructure.DataBase.Repository.Base;
 using Infrastructure.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
 
