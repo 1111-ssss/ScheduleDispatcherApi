@@ -1,9 +1,9 @@
-using Application.Abstractions.Repository;
+using Application.Abstractions.Repository.Base;
 using Ardalis.Specification.EntityFrameworkCore;
 using Infrastructure.DataBase.Context;
 using Microsoft.EntityFrameworkCore;
 
-namespace Infrastructure.DataBase.Repository;
+namespace Infrastructure.DataBase.Repository.Base;
 
 public class BaseRepository<T> : RepositoryBase<T>, IBaseRepository<T> where T : class
 {
