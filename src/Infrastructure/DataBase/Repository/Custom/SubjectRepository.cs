@@ -29,46 +29,55 @@ public class SubjectRepository : BaseRepository<Subject>, ISubjectRepository
         var query = ApplySpecification(spec);
 
         var lessons = await query
-            .Select(s => new LessonInfoDTO(
-                LessonName: s.Name,
+            .Select(s => new {
+                LessonName = s.Name,
 
-                Semester1: s.CnSpecNavigation!
+                Semester1 = s.CnSpecNavigation!
                     .Groups!
                     .SelectMany(g => g.SubjectTeachers!)
                     .SelectMany(st => st.Subjectteachersemesters!)
                     .Any(sts => sts.Semester1 == true),
 
-                Semester2: s.CnSpecNavigation!
+                Semester2 = s.CnSpecNavigation!
                     .Groups!
                     .SelectMany(g => g.SubjectTeachers!)
                     .SelectMany(st => st.Subjectteachersemesters!)
                     .Any(sts => sts.Semester2 == true),
 
-                Course: s.CnSpecNavigation!
+                Course = s.CnSpecNavigation!
                     .Groups!
                     .Select(g => g.Cours)
                     .Distinct()
                     .OrderBy(c => c)
                     .FirstOrDefault(),
 
-                Groups: s.CnSpecNavigation!
+                GroupsFlat = s.CnSpecNavigation!
                     .Groups!
                     .Where(g => !string.IsNullOrEmpty(g.Name))
-                    .GroupBy(g => g.CnSpecNavigation != null 
-                        ? g.CnSpecNavigation.Name ?? "Без специальности" 
-                        : "Без специальности")
-                    .ToDictionary(
-                        grp => grp.Key,
-                        grp => grp
-                            .Select(g => g.Name!)
-                            .Distinct()
-                            .OrderBy(name => name)
-                            .ToList()
-                    )
-            ))
-            .ToListAsync(ct);
+                    .Select(g => new
+                    {
+                        GroupName = g.Name!,
+                        SpecName  = g.CnSpecNavigation != null 
+                            ? g.CnSpecNavigation.Name ?? "Без специальности"
+                            : "Без специальности"
+                    })
+            }).ToListAsync(ct);
 
-        return lessons;
-        
+        return lessons.Select(r => new LessonInfoDTO(
+            LessonName: r.LessonName,
+            Semester1: r.Semester1,
+            Semester2: r.Semester2,
+            Course: r.Course,
+            Groups: r.GroupsFlat
+                .GroupBy(x => x.SpecName)
+                .ToDictionary(
+                    g => g.Key,
+                    g => g
+                        .Select(x => x.GroupName)
+                        .Distinct()
+                        .OrderBy(name => name)
+                        .ToList()
+                )
+        )).ToList();;
     }
 }
