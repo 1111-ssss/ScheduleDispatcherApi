@@ -1,4 +1,4 @@
-﻿namespace Infrastructure.src.Domain.Entities;
+﻿namespace Domain.Entities;
 
 public partial class Employer
 {

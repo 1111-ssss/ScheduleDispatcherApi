@@ -1,4 +1,4 @@
-using Infrastructure.src.Domain.Entities;
+using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.DataBase.Context;

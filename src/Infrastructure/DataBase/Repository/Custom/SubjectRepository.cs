@@ -4,7 +4,7 @@ using Application.Features.Dispatcher.GetAllLessons;
 using Ardalis.Specification;
 using Infrastructure.DataBase.Context;
 using Infrastructure.DataBase.Repository.Base;
-using Infrastructure.src.Domain.Entities;
+using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.DataBase.Repository.Custom;

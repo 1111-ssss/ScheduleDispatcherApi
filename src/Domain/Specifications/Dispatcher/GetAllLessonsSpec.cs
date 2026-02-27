@@ -1,5 +1,5 @@
 using Ardalis.Specification;
-using Infrastructure.src.Domain.Entities;
+using Domain.Entities;
 
 namespace Domain.Specifications.Dispatcher;
 

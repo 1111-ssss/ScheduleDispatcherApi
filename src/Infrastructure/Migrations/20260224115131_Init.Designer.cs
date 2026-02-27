@@ -25,7 +25,7 @@ namespace Infrastructure.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("Infrastructure.src.Domain.Entities.Classroom", b =>
+            modelBuilder.Entity("Domain.Entities.Classroom", b =>
                 {
                     b.Property<int>("IdClassroom")
                         .ValueGeneratedOnAdd()
@@ -48,7 +48,7 @@ namespace Infrastructure.Migrations
                     b.ToTable("classrooms", (string)null);
                 });
 
-            modelBuilder.Entity("Infrastructure.src.Domain.Entities.Curator", b =>
+            modelBuilder.Entity("Domain.Entities.Curator", b =>
                 {
                     b.Property<int>("IdCurator")
                         .ValueGeneratedOnAdd()
@@ -82,7 +82,7 @@ namespace Infrastructure.Migrations
                     b.ToTable("curator", (string)null);
                 });
 
-            modelBuilder.Entity("Infrastructure.src.Domain.Entities.Employer", b =>
+            modelBuilder.Entity("Domain.Entities.Employer", b =>
                 {
                     b.Property<string>("CnE")
                         .HasMaxLength(15)
@@ -113,7 +113,7 @@ namespace Infrastructure.Migrations
                     b.ToTable("employer", (string)null);
                 });
 
-            modelBuilder.Entity("Infrastructure.src.Domain.Entities.Exam", b =>
+            modelBuilder.Entity("Domain.Entities.Exam", b =>
                 {
                     b.Property<int>("IdSchedule")
                         .HasColumnType("integer")
@@ -125,7 +125,7 @@ namespace Infrastructure.Migrations
                     b.ToTable("exam", (string)null);
                 });
 
-            modelBuilder.Entity("Infrastructure.src.Domain.Entities.Group", b =>
+            modelBuilder.Entity("Domain.Entities.Group", b =>
                 {
                     b.Property<string>("CnG")
                         .HasMaxLength(4)
@@ -154,7 +154,7 @@ namespace Infrastructure.Migrations
                     b.ToTable("group", (string)null);
                 });
 
-            modelBuilder.Entity("Infrastructure.src.Domain.Entities.Okr", b =>
+            modelBuilder.Entity("Domain.Entities.Okr", b =>
                 {
                     b.Property<int>("IdSchedule")
                         .HasColumnType("integer")
@@ -166,7 +166,7 @@ namespace Infrastructure.Migrations
                     b.ToTable("okr", (string)null);
                 });
 
-            modelBuilder.Entity("Infrastructure.src.Domain.Entities.Removal", b =>
+            modelBuilder.Entity("Domain.Entities.Removal", b =>
                 {
                     b.Property<int>("IdRemoval")
                         .ValueGeneratedOnAdd()
@@ -193,7 +193,7 @@ namespace Infrastructure.Migrations
                     b.ToTable("removal", (string)null);
                 });
 
-            modelBuilder.Entity("Infrastructure.src.Domain.Entities.Schedule", b =>
+            modelBuilder.Entity("Domain.Entities.Schedule", b =>
                 {
                     b.Property<int>("IdSchedule")
                         .ValueGeneratedOnAdd()
@@ -228,7 +228,7 @@ namespace Infrastructure.Migrations
                     b.ToTable("schedule", (string)null);
                 });
 
-            modelBuilder.Entity("Infrastructure.src.Domain.Entities.Specialty", b =>
+            modelBuilder.Entity("Domain.Entities.Specialty", b =>
                 {
                     b.Property<string>("CnSpec")
                         .HasMaxLength(30)
@@ -267,7 +267,7 @@ namespace Infrastructure.Migrations
                     b.ToTable("specialty", (string)null);
                 });
 
-            modelBuilder.Entity("Infrastructure.src.Domain.Entities.Subject", b =>
+            modelBuilder.Entity("Domain.Entities.Subject", b =>
                 {
                     b.Property<int>("IdSubject")
                         .ValueGeneratedOnAdd()
@@ -316,7 +316,7 @@ namespace Infrastructure.Migrations
                     b.ToTable("subject", (string)null);
                 });
 
-            modelBuilder.Entity("Infrastructure.src.Domain.Entities.SubjectTeacher", b =>
+            modelBuilder.Entity("Domain.Entities.SubjectTeacher", b =>
                 {
                     b.Property<int>("IdsubjectTeacher")
                         .ValueGeneratedOnAdd()
@@ -353,7 +353,7 @@ namespace Infrastructure.Migrations
                     b.ToTable("subject_teacher", (string)null);
                 });
 
-            modelBuilder.Entity("Infrastructure.src.Domain.Entities.SubjectTeacherSchedule", b =>
+            modelBuilder.Entity("Domain.Entities.SubjectTeacherSchedule", b =>
                 {
                     b.Property<int>("IdsubjectTeacher")
                         .HasColumnType("integer")
@@ -395,7 +395,7 @@ namespace Infrastructure.Migrations
                     b.ToTable("subject_teacher_schedule", (string)null);
                 });
 
-            modelBuilder.Entity("Infrastructure.src.Domain.Entities.SubjectTeacherSemester", b =>
+            modelBuilder.Entity("Domain.Entities.SubjectTeacherSemester", b =>
                 {
                     b.Property<int>("IdsubjectTeacherSemester")
                         .ValueGeneratedOnAdd()
@@ -424,7 +424,7 @@ namespace Infrastructure.Migrations
                     b.ToTable("subject_teacher_semester", (string)null);
                 });
 
-            modelBuilder.Entity("Infrastructure.src.Domain.Entities.Teacher", b =>
+            modelBuilder.Entity("Domain.Entities.Teacher", b =>
                 {
                     b.Property<string>("CnT")
                         .HasMaxLength(15)
@@ -471,15 +471,15 @@ namespace Infrastructure.Migrations
                     b.ToTable("limitation_on_choice_of_audience_subject", (string)null);
                 });
 
-            modelBuilder.Entity("Infrastructure.src.Domain.Entities.Curator", b =>
+            modelBuilder.Entity("Domain.Entities.Curator", b =>
                 {
-                    b.HasOne("Infrastructure.src.Domain.Entities.Group", "CnGNavigation")
+                    b.HasOne("Domain.Entities.Group", "CnGNavigation")
                         .WithMany("Curators")
                         .HasForeignKey("CnG")
                         .IsRequired()
                         .HasConstraintName("fk_curator_group");
 
-                    b.HasOne("Infrastructure.src.Domain.Entities.Teacher", "CnTNavigation")
+                    b.HasOne("Domain.Entities.Teacher", "CnTNavigation")
                         .WithMany("Curators")
                         .HasForeignKey("CnT")
                         .IsRequired()
@@ -490,20 +490,20 @@ namespace Infrastructure.Migrations
                     b.Navigation("CnTNavigation");
                 });
 
-            modelBuilder.Entity("Infrastructure.src.Domain.Entities.Exam", b =>
+            modelBuilder.Entity("Domain.Entities.Exam", b =>
                 {
-                    b.HasOne("Infrastructure.src.Domain.Entities.Schedule", "IdScheduleNavigation")
+                    b.HasOne("Domain.Entities.Schedule", "IdScheduleNavigation")
                         .WithOne("Exam")
-                        .HasForeignKey("Infrastructure.src.Domain.Entities.Exam", "IdSchedule")
+                        .HasForeignKey("Domain.Entities.Exam", "IdSchedule")
                         .IsRequired()
                         .HasConstraintName("fk_exam_schedule");
 
                     b.Navigation("IdScheduleNavigation");
                 });
 
-            modelBuilder.Entity("Infrastructure.src.Domain.Entities.Group", b =>
+            modelBuilder.Entity("Domain.Entities.Group", b =>
                 {
-                    b.HasOne("Infrastructure.src.Domain.Entities.Specialty", "CnSpecNavigation")
+                    b.HasOne("Domain.Entities.Specialty", "CnSpecNavigation")
                         .WithMany("Groups")
                         .HasForeignKey("CnSpec")
                         .IsRequired()
@@ -512,26 +512,26 @@ namespace Infrastructure.Migrations
                     b.Navigation("CnSpecNavigation");
                 });
 
-            modelBuilder.Entity("Infrastructure.src.Domain.Entities.Okr", b =>
+            modelBuilder.Entity("Domain.Entities.Okr", b =>
                 {
-                    b.HasOne("Infrastructure.src.Domain.Entities.Schedule", "IdScheduleNavigation")
+                    b.HasOne("Domain.Entities.Schedule", "IdScheduleNavigation")
                         .WithOne("Okr")
-                        .HasForeignKey("Infrastructure.src.Domain.Entities.Okr", "IdSchedule")
+                        .HasForeignKey("Domain.Entities.Okr", "IdSchedule")
                         .IsRequired()
                         .HasConstraintName("fk_okr_schedule");
 
                     b.Navigation("IdScheduleNavigation");
                 });
 
-            modelBuilder.Entity("Infrastructure.src.Domain.Entities.Removal", b =>
+            modelBuilder.Entity("Domain.Entities.Removal", b =>
                 {
-                    b.HasOne("Infrastructure.src.Domain.Entities.Schedule", "IdSchedule1Navigation")
+                    b.HasOne("Domain.Entities.Schedule", "IdSchedule1Navigation")
                         .WithMany("RemovalIdSchedule1Navigations")
                         .HasForeignKey("IdSchedule1")
                         .IsRequired()
                         .HasConstraintName("fk_removal_sched1");
 
-                    b.HasOne("Infrastructure.src.Domain.Entities.Schedule", "IdSchedule2Navigation")
+                    b.HasOne("Domain.Entities.Schedule", "IdSchedule2Navigation")
                         .WithMany("RemovalIdSchedule2Navigations")
                         .HasForeignKey("IdSchedule2")
                         .IsRequired()
@@ -542,9 +542,9 @@ namespace Infrastructure.Migrations
                     b.Navigation("IdSchedule2Navigation");
                 });
 
-            modelBuilder.Entity("Infrastructure.src.Domain.Entities.Specialty", b =>
+            modelBuilder.Entity("Domain.Entities.Specialty", b =>
                 {
-                    b.HasOne("Infrastructure.src.Domain.Entities.Teacher", "CnTNavigation")
+                    b.HasOne("Domain.Entities.Teacher", "CnTNavigation")
                         .WithMany("Specialties")
                         .HasForeignKey("CnT")
                         .IsRequired()
@@ -553,9 +553,9 @@ namespace Infrastructure.Migrations
                     b.Navigation("CnTNavigation");
                 });
 
-            modelBuilder.Entity("Infrastructure.src.Domain.Entities.Subject", b =>
+            modelBuilder.Entity("Domain.Entities.Subject", b =>
                 {
-                    b.HasOne("Infrastructure.src.Domain.Entities.Specialty", "CnSpecNavigation")
+                    b.HasOne("Domain.Entities.Specialty", "CnSpecNavigation")
                         .WithMany("Subjects")
                         .HasForeignKey("CnSpec")
                         .IsRequired()
@@ -564,21 +564,21 @@ namespace Infrastructure.Migrations
                     b.Navigation("CnSpecNavigation");
                 });
 
-            modelBuilder.Entity("Infrastructure.src.Domain.Entities.SubjectTeacher", b =>
+            modelBuilder.Entity("Domain.Entities.SubjectTeacher", b =>
                 {
-                    b.HasOne("Infrastructure.src.Domain.Entities.Group", "CnGNavigation")
+                    b.HasOne("Domain.Entities.Group", "CnGNavigation")
                         .WithMany("SubjectTeachers")
                         .HasForeignKey("CnG")
                         .IsRequired()
                         .HasConstraintName("fk_subj_teacher_group");
 
-                    b.HasOne("Infrastructure.src.Domain.Entities.Teacher", "CnTNavigation")
+                    b.HasOne("Domain.Entities.Teacher", "CnTNavigation")
                         .WithMany("SubjectTeachers")
                         .HasForeignKey("CnT")
                         .IsRequired()
                         .HasConstraintName("fk_subj_teacher_teacher");
 
-                    b.HasOne("Infrastructure.src.Domain.Entities.Subject", "IdSubjectNavigation")
+                    b.HasOne("Domain.Entities.Subject", "IdSubjectNavigation")
                         .WithMany("SubjectTeachers")
                         .HasForeignKey("IdSubject")
                         .IsRequired()
@@ -591,15 +591,15 @@ namespace Infrastructure.Migrations
                     b.Navigation("IdSubjectNavigation");
                 });
 
-            modelBuilder.Entity("Infrastructure.src.Domain.Entities.SubjectTeacherSchedule", b =>
+            modelBuilder.Entity("Domain.Entities.SubjectTeacherSchedule", b =>
                 {
-                    b.HasOne("Infrastructure.src.Domain.Entities.Schedule", "IdScheduleNavigation")
+                    b.HasOne("Domain.Entities.Schedule", "IdScheduleNavigation")
                         .WithMany("SubjectTeacherSchedules")
                         .HasForeignKey("IdSchedule")
                         .IsRequired()
                         .HasConstraintName("fk_sts_schedule");
 
-                    b.HasOne("Infrastructure.src.Domain.Entities.SubjectTeacher", "IdsubjectTeacherNavigation")
+                    b.HasOne("Domain.Entities.SubjectTeacher", "IdsubjectTeacherNavigation")
                         .WithMany("SubjectTeacherSchedules")
                         .HasForeignKey("IdsubjectTeacher")
                         .IsRequired()
@@ -610,9 +610,9 @@ namespace Infrastructure.Migrations
                     b.Navigation("IdsubjectTeacherNavigation");
                 });
 
-            modelBuilder.Entity("Infrastructure.src.Domain.Entities.SubjectTeacherSemester", b =>
+            modelBuilder.Entity("Domain.Entities.SubjectTeacherSemester", b =>
                 {
-                    b.HasOne("Infrastructure.src.Domain.Entities.SubjectTeacher", "IdsubjectTeacherNavigation")
+                    b.HasOne("Domain.Entities.SubjectTeacher", "IdsubjectTeacherNavigation")
                         .WithMany("Subjectteachersemesters")
                         .HasForeignKey("IdsubjectTeacher")
                         .IsRequired()
@@ -621,9 +621,9 @@ namespace Infrastructure.Migrations
                     b.Navigation("IdsubjectTeacherNavigation");
                 });
 
-            modelBuilder.Entity("Infrastructure.src.Domain.Entities.Teacher", b =>
+            modelBuilder.Entity("Domain.Entities.Teacher", b =>
                 {
-                    b.HasOne("Infrastructure.src.Domain.Entities.Employer", "CnENavigation")
+                    b.HasOne("Domain.Entities.Employer", "CnENavigation")
                         .WithMany("Teachers")
                         .HasForeignKey("CnE")
                         .IsRequired()
@@ -634,32 +634,32 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("LimitationOnChoiceOfAudienceSubject", b =>
                 {
-                    b.HasOne("Infrastructure.src.Domain.Entities.Classroom", null)
+                    b.HasOne("Domain.Entities.Classroom", null)
                         .WithMany()
                         .HasForeignKey("IdClassroom")
                         .IsRequired()
                         .HasConstraintName("fk_lim_classroom");
 
-                    b.HasOne("Infrastructure.src.Domain.Entities.Subject", null)
+                    b.HasOne("Domain.Entities.Subject", null)
                         .WithMany()
                         .HasForeignKey("IdSubject")
                         .IsRequired()
                         .HasConstraintName("fk_lim_subject");
                 });
 
-            modelBuilder.Entity("Infrastructure.src.Domain.Entities.Employer", b =>
+            modelBuilder.Entity("Domain.Entities.Employer", b =>
                 {
                     b.Navigation("Teachers");
                 });
 
-            modelBuilder.Entity("Infrastructure.src.Domain.Entities.Group", b =>
+            modelBuilder.Entity("Domain.Entities.Group", b =>
                 {
                     b.Navigation("Curators");
 
                     b.Navigation("SubjectTeachers");
                 });
 
-            modelBuilder.Entity("Infrastructure.src.Domain.Entities.Schedule", b =>
+            modelBuilder.Entity("Domain.Entities.Schedule", b =>
                 {
                     b.Navigation("Exam");
 
@@ -672,26 +672,26 @@ namespace Infrastructure.Migrations
                     b.Navigation("SubjectTeacherSchedules");
                 });
 
-            modelBuilder.Entity("Infrastructure.src.Domain.Entities.Specialty", b =>
+            modelBuilder.Entity("Domain.Entities.Specialty", b =>
                 {
                     b.Navigation("Groups");
 
                     b.Navigation("Subjects");
                 });
 
-            modelBuilder.Entity("Infrastructure.src.Domain.Entities.Subject", b =>
+            modelBuilder.Entity("Domain.Entities.Subject", b =>
                 {
                     b.Navigation("SubjectTeachers");
                 });
 
-            modelBuilder.Entity("Infrastructure.src.Domain.Entities.SubjectTeacher", b =>
+            modelBuilder.Entity("Domain.Entities.SubjectTeacher", b =>
                 {
                     b.Navigation("SubjectTeacherSchedules");
 
                     b.Navigation("Subjectteachersemesters");
                 });
 
-            modelBuilder.Entity("Infrastructure.src.Domain.Entities.Teacher", b =>
+            modelBuilder.Entity("Domain.Entities.Teacher", b =>
                 {
                     b.Navigation("Curators");
 
