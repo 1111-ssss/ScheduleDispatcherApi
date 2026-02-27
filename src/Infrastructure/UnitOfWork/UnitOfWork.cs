@@ -1,5 +1,8 @@
 using Application.Abstractions.Interfaces.UnitOfWork;
+using Domain.Model.CustomException;
 using Infrastructure.DataBase.Context;
+using Microsoft.EntityFrameworkCore;
+using Npgsql;
 
 namespace Infrastructure.UnitOfWork;
 
@@ -12,7 +15,14 @@ public class UnitOfWork : IUnitOfWork
     }
     public async Task<int> CommitAsync(CancellationToken ct = default)
     {
-        return await _db.SaveChangesAsync(ct);
+        try
+        {
+            return await _db.SaveChangesAsync(ct);
+        }
+        catch (DbUpdateException ex) when (ex.InnerException is PostgresException pgEx)
+        {
+            throw new CustomDbException(ex.Message, pgEx.SqlState);
+        }
     }
     public void Dispose()
     {
