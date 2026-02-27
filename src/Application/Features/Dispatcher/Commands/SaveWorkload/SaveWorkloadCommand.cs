@@ -1,5 +1,5 @@
 using Application.Features.Dispatcher.Common;
-using Domain.Abstractions.Result;
+using Domain.Model.Result;
 using MediatR;
 
 namespace Application.Features.Dispatcher.SaveWorkload;

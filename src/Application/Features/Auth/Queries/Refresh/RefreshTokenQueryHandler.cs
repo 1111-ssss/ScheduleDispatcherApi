@@ -1,6 +1,7 @@
 using Application.Abstractions.Interfaces.Auth;
 using Application.Features.Auth.Common;
 using Domain.Abstractions.Result;
+using Domain.Model.Result;
 using Infrastructure.Abstractions.Interfaces.Auth;
 using MediatR;
 

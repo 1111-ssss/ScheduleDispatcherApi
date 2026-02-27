@@ -3,6 +3,7 @@ using System.Text;
 using Konscious.Security.Cryptography;
 using Domain.Abstractions.Result;
 using Infrastructure.Abstractions.Interfaces.Auth;
+using Domain.Model.Result;
 
 namespace Infrastructure.Services.Auth;
 

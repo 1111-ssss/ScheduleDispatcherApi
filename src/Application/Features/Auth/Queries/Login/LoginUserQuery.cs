@@ -1,6 +1,6 @@
 using MediatR;
-using Domain.Abstractions.Result;
 using Application.Features.Auth.Common;
+using Domain.Model.Result;
 
 namespace Application.Features.Auth.Login;
 

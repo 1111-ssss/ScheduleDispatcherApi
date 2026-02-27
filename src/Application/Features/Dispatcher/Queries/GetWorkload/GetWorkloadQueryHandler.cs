@@ -1,6 +1,6 @@
 using Application.Features.Dispatcher.Common;
 using Application.Features.Dispatcher.GetWorkload;
-using Domain.Abstractions.Result;
+using Domain.Model.Result;
 using MediatR;
 using Microsoft.Extensions.Logging;
 

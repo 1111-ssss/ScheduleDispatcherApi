@@ -1,5 +1,5 @@
 using Application.Abstractions.Interfaces.UnitOfWork;
-using Domain.Abstractions.Result;
+using Domain.Model.Result;
 using MediatR;
 
 namespace Application.Features.Sync.SyncData;

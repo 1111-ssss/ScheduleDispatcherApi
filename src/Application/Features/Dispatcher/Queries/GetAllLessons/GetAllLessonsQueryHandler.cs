@@ -1,5 +1,5 @@
 using Application.Abstractions.Repository.Custom;
-using Domain.Abstractions.Result;
+using Domain.Model.Result;
 using Domain.Specifications.Dispatcher;
 using MediatR;
 using Microsoft.Extensions.Logging;

@@ -1,4 +1,5 @@
 using Domain.Abstractions.Result;
+using Domain.Model.Result;
 
 public static class ResultExtensions
 {

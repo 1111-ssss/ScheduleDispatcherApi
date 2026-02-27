@@ -1,13 +1,7 @@
-namespace Domain.Abstractions.Result;
+using Domain.Abstractions.Result;
 
-public interface IResultBase
-{
-    bool IsSuccess { get; }
-    bool IsComplited { get; }
-    ErrorCode? Error { get; }
-    string? Message { get; }
-    Dictionary<string, string>? Details { get; }
-}
+namespace Domain.Model.Result;
+
 public sealed class Result : IResultBase
 {
     public bool IsSuccess => Error is null;

@@ -1,8 +1,9 @@
 using Application.Abstractions.Model.DTO;
-using Application.Abstractions.Repository;
+using Application.Abstractions.Repository.Base;
 using Application.Features.Auth.Login;
 using Domain.Abstractions.Result;
 using Domain.Entities;
+using Domain.Model.Result;
 using Domain.Specifications.Auth;
 using FluentAssertions;
 using Infrastructure.Abstractions.Interfaces.Auth;

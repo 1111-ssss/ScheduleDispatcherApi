@@ -1,5 +1,5 @@
 using Application.Features.Auth.Common;
-using Domain.Abstractions.Result;
+using Domain.Model.Result;
 using MediatR;
 
 namespace Application.Features.Auth.Refresh;
