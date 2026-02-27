@@ -19,8 +19,10 @@ public partial class AppDbContext : DbContext
     public virtual DbSet<Specialty> Specialties { get; set; }
     public virtual DbSet<Subject> Subjects { get; set; }
     public virtual DbSet<SubjectTeacher> SubjectTeachers { get; set; }
-
     public virtual DbSet<SubjectTeacherSchedule> SubjectTeacherSchedules { get; set; }
+    public virtual DbSet<SubjectTeacherSemester> SubjectTeacherSemesters { get; set; }
+    public virtual DbSet<Teacher> Teachers { get; set; }
+    public virtual DbSet<User> Users { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
