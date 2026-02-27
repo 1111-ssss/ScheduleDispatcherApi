@@ -1,4 +1,4 @@
-namespace Domain.Abstractions.Result;
+namespace Domain.Model.Result;
 
 public class ErrorResponse
 {

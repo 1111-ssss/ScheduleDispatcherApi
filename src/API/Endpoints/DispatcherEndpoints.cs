@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using MediatR;
-using Domain.Abstractions.Result;
+using Domain.Model.Result;
 using Application.Features.Dispatcher.GetWorkload;
 using Application.Features.Dispatcher.Common;
 using Application.Features.Dispatcher.SaveWorkload;

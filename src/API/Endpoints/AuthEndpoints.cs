@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using MediatR;
 using Application.Features.Auth.Login;
-using Domain.Abstractions.Result;
+using Domain.Model.Result;
 using Application.Features.Auth.Common;
 using Application.Features.Auth.Refresh;
 

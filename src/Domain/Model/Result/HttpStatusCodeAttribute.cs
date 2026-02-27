@@ -1,4 +1,6 @@
-namespace Domain.Abstractions.Result;
+using Domain.Abstractions.Result;
+
+namespace Domain.Model.Result;
 
 [AttributeUsage(AttributeTargets.Field)]
 public class HttpStatusCodeAttribute : Attribute

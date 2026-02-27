@@ -1,3 +1,5 @@
+using Domain.Model.Result;
+
 namespace Domain.Abstractions.Result;
 
 public enum ErrorCode

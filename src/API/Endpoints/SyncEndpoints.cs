@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using MediatR;
-using Domain.Abstractions.Result;
+using Domain.Model.Result;
 using Application.Features.Sync.SyncData;
 
 namespace API.Endpoints;
