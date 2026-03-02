@@ -77,7 +77,7 @@ public class InMemoryDbContextFixture
 
         var group3 = new Group
         {
-            CnG = "П21",
+            CnG = "П23",
             Name = "П21",
             Cours = 2,
             CnSpec = "10.02.01"
