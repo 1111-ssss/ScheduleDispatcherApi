@@ -6,18 +6,21 @@ using Infrastructure.DataBase.Repository.Custom;
 using Infrastructure.Tests.Fixtures;
 using Microsoft.Extensions.Logging;
 using Moq;
+using Xunit.Abstractions;
 
 namespace Application.Tests.Features.Dispatcher.Queries.GetAllLessons;
 
 public class GetAllLessonsQueryTests : IDisposable
 {
     private readonly InMemoryDbContextFixture _fixture;
+    private readonly ITestOutputHelper _output;
     private readonly string _dbName;
 
-    public GetAllLessonsQueryTests()
+    public GetAllLessonsQueryTests(ITestOutputHelper testOutputHelper)
     {
         _fixture = new InMemoryDbContextFixture();
         _dbName = _fixture.CreateDatabaseName();
+        _output = testOutputHelper;
     }
 
     [Fact]
@@ -87,6 +90,22 @@ public class GetAllLessonsQueryTests : IDisposable
 
         // Assert
         result.IsSuccess.Should().BeTrue();
+
+        // Output
+        int outputCounter = 0;
+        _output.WriteLine($"Result: {result.Value}, Lessons count: {result.Value.Lessons.Count()}");
+        foreach (var lesson in result.Value.Lessons)
+        {
+            _output.WriteLine($"\tLessonName: {lesson.LessonName} \n\tSemester1: {lesson.Semester1} \n\tSemester2: {lesson.Semester2} \n\tCourse: {lesson.Course}");
+            foreach (var group in lesson.Groups)
+            {
+                _output.WriteLine($"\tGroup: {group.Key}, Groups: {string.Join(", ", group.Value)}\n");
+            }
+            outputCounter++;
+            if (outputCounter == 4)
+                return;
+        }
+        // Output end
 
         var webDevLesson = result.Value.Lessons.FirstOrDefault(l => l.LessonName == "Веб-программирование");
         webDevLesson.Should().NotBeNull();
