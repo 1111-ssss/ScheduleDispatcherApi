@@ -14,6 +14,7 @@ builder.Services.AddCustomDbContext(builder.Configuration);
 var app = builder.Build();
 
 app.UseCustomMiddleware();
+app.UseRateLimiter();
 
 //Endpoints
 app.MapCustomRoutes();

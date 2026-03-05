@@ -1,6 +1,6 @@
 using System.Threading.RateLimiting;
 
-namespace Web.Extensions.DependencyInjection;
+namespace API.Extensions;
 
 public static class RateLimitExtension
 {
