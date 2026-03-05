@@ -14,6 +14,7 @@ public static class DispatcherEndpoints
     public static IEndpointRouteBuilder MapDispatcherEndpoints(this IEndpointRouteBuilder app)
     {
         var group = app.MapGroup("/api/dispatcher")
+            .RequireRateLimiting("DefaultLimiter")
             .WithTags("Функции диспетчера");
 
         group.MapGet("/get", GetWorkloadAsync)

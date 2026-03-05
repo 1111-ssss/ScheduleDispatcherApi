@@ -10,6 +10,7 @@ public static class SyncEndpoints
     public static IEndpointRouteBuilder MapSyncEndpoints(this IEndpointRouteBuilder app)
     {
         var group = app.MapGroup("/api/sync")
+            .RequireRateLimiting("StrictLimiter")
             .WithTags("Синхронизация с Единым Колледжем");
 
         group.MapPost("/", SyncDataAsync)
