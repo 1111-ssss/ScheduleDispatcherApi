@@ -18,9 +18,9 @@ public partial class Schedule
 
     public virtual Okr? Okr { get; set; }
 
-    public virtual ICollection<Removal> RemovalIdSchedule1Navigations { get; set; } = new List<Removal>();
-
-    public virtual ICollection<Removal> RemovalIdSchedule2Navigations { get; set; } = new List<Removal>();
+    public virtual Removal? RemovalAsFirst { get; set; }
+    
+    public virtual Removal? RemovalAsSecond { get; set; }
 
     public virtual ICollection<SubjectTeacherSchedule> SubjectTeacherSchedules { get; set; } = new List<SubjectTeacherSchedule>();
 }
