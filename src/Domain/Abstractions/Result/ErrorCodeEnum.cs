@@ -51,6 +51,8 @@ public enum ErrorCode
     NotFound,
     [HttpStatusCode(404)]
     UserNotFound,
+    [HttpStatusCode(404)]
+    TeacherNotFound,
 
     //Ошибки конфликтации (409 Conflict)
     [HttpStatusCode(409)]

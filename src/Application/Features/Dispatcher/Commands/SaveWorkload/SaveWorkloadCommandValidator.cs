@@ -29,7 +29,12 @@ public class SaveWorkloadCommandValidator : AbstractValidator<SaveWorkloadComman
                             .WithMessage("Поле {PropertyName} не может быть пустым")
                             .GreaterThan(0).WithState(_ => ErrorCode.InvalidWorkload)
                             .WithMessage("Поле {PropertyName} должно быть больше 0");
-                        workLoadList.RuleFor(x => x.LessonDate)
+                        workLoadList.RuleFor(x => x.LessonDate1)
+                            .NotEmpty().WithState(_ => ErrorCode.InvalidWorkload)
+                            .WithMessage("Поле {PropertyName} не может быть пустым")
+                            .Must(x => x >= DateTime.Today).WithState(_ => ErrorCode.InvalidWorkload)
+                            .WithMessage("Поле {PropertyName} должно быть больше или равно сегодняшнему дню");
+                        workLoadList.RuleFor(x => x.LessonDate2)
                             .NotEmpty().WithState(_ => ErrorCode.InvalidWorkload)
                             .WithMessage("Поле {PropertyName} не может быть пустым")
                             .Must(x => x >= DateTime.Today).WithState(_ => ErrorCode.InvalidWorkload)
