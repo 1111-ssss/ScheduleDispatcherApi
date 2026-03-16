@@ -58,6 +58,7 @@ public class GetWorkloadQueryHandler : IRequestHandler<GetWorkloadQuery, Result<
                 item.Schedule.Lessonnumber ?? 0,
                 item.IsSplit ?? false,
                 item.Schedule.Date1 ?? DateTime.MinValue,
+                item.Schedule.Date2 ?? DateTime.MinValue,
                 item.Schedule.RemovalAsFirst?.IdRemoval ?? item.Schedule.RemovalAsSecond?.IdRemoval ?? 0
             )).ToList(),
 
