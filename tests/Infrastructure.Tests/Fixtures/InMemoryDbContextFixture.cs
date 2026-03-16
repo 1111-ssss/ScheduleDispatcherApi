@@ -227,6 +227,7 @@ public class InMemoryDbContextFixture
             IdSchedule = 1,
             Lessonnumber = 1,
             Date1 = new DateTime(2025, 9, 1),
+            Date2 = new DateTime(2025, 9, 2),
             IsPractical = false,
             IsOver = false
         };
@@ -236,6 +237,7 @@ public class InMemoryDbContextFixture
             IdSchedule = 2,
             Lessonnumber = 2,
             Date1 = new DateTime(2025, 9, 2),
+            Date2 = new DateTime(2025, 9, 3),
             IsPractical = true,
             IsOver = false
         };
@@ -245,6 +247,7 @@ public class InMemoryDbContextFixture
             IdSchedule = 3,
             Lessonnumber = 1,
             Date1 = new DateTime(2025, 9, 3),
+            Date2 = new DateTime(2025, 9, 4),
             IsPractical = false,
             IsOver = false
         };
@@ -254,6 +257,7 @@ public class InMemoryDbContextFixture
             IdSchedule = 4,
             Lessonnumber = 3,
             Date1 = new DateTime(2025, 9, 4),
+            Date2 = new DateTime(2025, 9, 5),
             IsPractical = true,
             IsOver = false
         };

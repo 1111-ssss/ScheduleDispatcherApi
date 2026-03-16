@@ -115,7 +115,8 @@ public class GetWorkloadQueryTests : IDisposable
         workload.LessonName.Should().Be("Базы данных");
         workload.LessonIndex.Should().Be(1);
         workload.IsLessonSplit.Should().BeFalse();
-        workload.LessonDate.Should().Be(new DateTime(2025, 9, 1));
+        workload.LessonDate1.Should().Be(new DateTime(2025, 9, 1));
+        workload.LessonDate2.Should().Be(new DateTime(2025, 9, 2));
     }
 
     [Fact]
@@ -167,7 +168,8 @@ public class GetWorkloadQueryTests : IDisposable
         var workload = result.Value.WorkloadList.First();
         workload.LessonName.Should().Be("Базы данных");
         workload.IsLessonSplit.Should().BeTrue();
-        workload.LessonDate.Should().Be(new DateTime(2025, 9, 2));
+        workload.LessonDate1.Should().Be(new DateTime(2025, 9, 2));
+        workload.LessonDate2.Should().Be(new DateTime(2025, 9, 3));
     }
 
     [Fact]
