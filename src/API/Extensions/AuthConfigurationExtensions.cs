@@ -33,6 +33,8 @@ public static class AuthConfigurationExtensions
         });
         services.AddAuthorization();
 
+        services.AddRateLimit();
+
         return services;
     }
 }
