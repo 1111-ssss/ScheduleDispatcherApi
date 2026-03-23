@@ -18,36 +18,36 @@ public static class DispatcherEndpoints
             .WithTags("Функции диспетчера");
 
         group.MapGet("/get", GetWorkloadAsync)
-            .WithName("Get Workload")
             .WithSummary("Запрос на получение расчасовки")
             .WithDescription("Позволяет получить расчасовку и снятие для предмета по группе, семестру и преподавателю. Возвращает расчасовку и снятие.")
+            .WithName("Get Workload")
             .Accepts<GetWorkloadQuery>("application/json")
             .Produces<WorkloadSummaryDTO>(StatusCodes.Status200OK)
             .Produces<ErrorResponse>(StatusCodes.Status400BadRequest)
             .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
         group.MapPost("/save", SaveWorkloadAsync)
-            .WithName("Save Workload")
             .WithSummary("Запрос на сохранение расчасовки")
             .WithDescription("Позволяет сохранить расчасовку и снятие для предмета по группе, семестру и преподавателю.")
+            .WithName("Save Workload")
             .Accepts<SaveWorkloadCommand>("application/json")
             .Produces(StatusCodes.Status200OK)
             .Produces<ErrorResponse>(StatusCodes.Status400BadRequest)
             .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
         group.MapPost("/finalize", FinalizeDayScheduleAsync)
-            .WithName("Finalize Workload")
             .WithSummary("Запрос на сохранение расписания дня")
             .WithDescription("Позволяет сохранять расписание дня для группы на определенный день.")
+            .WithName("Finalize Workload")
             .Accepts<FinalizeDayScheduleCommand>("application/json")
             .Produces(StatusCodes.Status200OK)
             .Produces<ErrorResponse>(StatusCodes.Status400BadRequest)
             .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
         group.MapGet("/lessons", GetAllLessonsAsync)
-            .WithName("Get Lessons Info")
             .WithSummary("Запрос на получение информации о предметах")
             .WithDescription("Позволяет получить информацию о предметах, в каком семестре они проводятся, на каком курсу и списку групп.")
+            .WithName("Get Lessons Info")
             .Produces<AllLessonsDTO>(StatusCodes.Status200OK)
             .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 

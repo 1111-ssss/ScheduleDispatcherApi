@@ -14,9 +14,9 @@ public static class SyncEndpoints
             .WithTags("Синхронизация с Единым Колледжем");
 
         group.MapPost("/", SyncDataAsync)
-            .WithName("Sync")
             .WithSummary("Запрос на синхронизацию с Единым Колледжем")
             .WithDescription("Позволяет администратору запросить синхронизацию базы данных с Единым Колледжем.")
+            .WithName("Sync")
             .Produces(StatusCodes.Status200OK)
             .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 

@@ -16,18 +16,18 @@ public static class AuthEndpoints
             .WithTags("Аутентификация");
 
         group.MapPost("/login", LoginAsync)
-            .WithName("Login")
             .WithSummary("Вход в систему")
             .WithDescription("Позволяет пользователю войти в систему, предоставив имя пользователя и пароль. В случае успешной аутентификации возвращает JWT-токен для доступа к защищенным ресурсам API.")
+            .WithName("Login")
             .Accepts<LoginUserQuery>("application/json")
             .Produces<AuthDTO>(StatusCodes.Status200OK)
             .Produces<ErrorResponse>(StatusCodes.Status400BadRequest)
             .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
         group.MapPost("/refresh", RefreshAsync)
-            .WithName("Refresh")
             .WithSummary("Обновление токена")
             .WithDescription("Позволяет обновить JWT-токен, используя refresh-токен. В случае успешного обновления возвращает новый JWT-токен.")
+            .WithName("Refresh")
             .Accepts<RefreshTokenQuery>("application/json")
             .Produces<AuthDTO>(StatusCodes.Status200OK)
             .Produces<ErrorResponse>(StatusCodes.Status400BadRequest)
