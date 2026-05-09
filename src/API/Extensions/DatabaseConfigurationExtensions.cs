@@ -22,6 +22,7 @@ public static class DatabaseConfigurationExtensions
 
         // Repository
         services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
+        services.AddScoped<IScheduleDraftRepository, ScheduleDraftRepository>();
 
         services.AddScoped<ISubjectRepository, SubjectRepository>();
 

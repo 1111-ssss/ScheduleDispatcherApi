@@ -23,6 +23,8 @@ public partial class AppDbContext : DbContext
     public virtual DbSet<SubjectTeacherSemester> SubjectTeacherSemesters { get; set; }
     public virtual DbSet<Teacher> Teachers { get; set; }
     public virtual DbSet<User> Users { get; set; }
+    public virtual DbSet<LessonEntity> Lessons { get; set;  }
+    public virtual DbSet<DayScheduleEntity> DaySchedule { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

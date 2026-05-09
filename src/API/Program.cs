@@ -1,4 +1,5 @@
 using API.Extensions;
+using MassTransit;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +11,8 @@ builder.Services.AddAuthServices(builder.Configuration);
 
 //DbContext
 builder.Services.AddCustomDbContext(builder.Configuration);
+
+builder.Services.AddMessaging(builder.Configuration);
 
 var app = builder.Build();
 

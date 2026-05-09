@@ -1,5 +1,6 @@
 using Application;
 using Application.Abstractions.Interfaces.Auth;
+using Application.Abstractions.Repository.Custom;
 using Application.Common.Behaviors;
 using FluentValidation;
 using Infrastructure.Abstractions.Interfaces.Auth;
@@ -32,6 +33,7 @@ public static class ServiceConfigurationExtensions
         services.AddScoped<ICurrentUserService, CurrentUserService>();
         services.AddScoped<IJwtGenerator, JwtGenerator>();
         services.AddScoped<IPasswordHasher, PasswordHasher>();
+
 
         return services;
     }
