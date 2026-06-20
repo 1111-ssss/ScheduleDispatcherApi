@@ -8,7 +8,7 @@ using Application.Features.Auth.Refresh;
 namespace API.Endpoints;
 
 public static class AuthEndpoints
-{
+    {
     public static IEndpointRouteBuilder MapAuthEndpoints(this IEndpointRouteBuilder app)
     {
         var group = app.MapGroup("/api/auth")
@@ -23,6 +23,18 @@ public static class AuthEndpoints
             .Produces<AuthDTO>(StatusCodes.Status200OK)
             .Produces<ErrorResponse>(StatusCodes.Status400BadRequest)
             .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
+
+        group.MapGet("/_debug-claims", (HttpContext ctx) =>
+        {
+            var u = ctx.User;
+            return Results.Ok(new
+            {
+                hasAuthHeader = ctx.Request.Headers.ContainsKey("Authorization"),
+                isAuthenticated = u.Identity?.IsAuthenticated,
+                authType = u.Identity?.AuthenticationType,
+                claims = u.Claims.Select(c => new { c.Type, c.Value }).ToList()
+            });
+        });
 
         group.MapPost("/refresh", RefreshAsync)
             .WithSummary("Обновление токена")
@@ -53,4 +65,4 @@ public static class AuthEndpoints
 
         return result.ToApiResult();
     }
-}
+    }

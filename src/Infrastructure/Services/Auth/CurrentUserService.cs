@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Http;
 namespace Infrastructure.Services.Auth;
 
 public class CurrentUserService : ICurrentUserService
-{
+    {
     private readonly IHttpContextAccessor _httpContextAccessor;
     public CurrentUserService(IHttpContextAccessor httpContextAccessor)
     {
@@ -36,7 +36,9 @@ public class CurrentUserService : ICurrentUserService
             return null;
 
         var idClaim = User.FindFirst(JwtRegisteredClaimNames.Sub)?.Value;
-        var usernameClaim = User.FindFirst(JwtRegisteredClaimNames.UniqueName)?.Value;
+
+        var usernameClaim = User.FindFirst(JwtRegisteredClaimNames.UniqueName)?.Value
+            ?? User.FindFirst(ClaimTypes.Name)?.Value;
         var roleClaim = User.FindFirst(ClaimTypes.Role)?.Value;
 
         if (idClaim == null || usernameClaim == null || roleClaim == null)
@@ -47,4 +49,4 @@ public class CurrentUserService : ICurrentUserService
 
         return null;
     }
-}
+    }
