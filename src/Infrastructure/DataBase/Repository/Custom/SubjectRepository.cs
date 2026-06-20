@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Infrastructure.DataBase.Repository.Custom;
 
 public class SubjectRepository : BaseRepository<Subject>, ISubjectRepository
-{
+    {
     public readonly IBaseRepository<Subject> _subjectRepository;
 
     public SubjectRepository(
@@ -32,33 +32,27 @@ public class SubjectRepository : BaseRepository<Subject>, ISubjectRepository
             .Select(s => new {
                 LessonName = s.Name,
 
-                Semester1 = s.CnSpecNavigation!
-                    .Groups!
-                    .SelectMany(g => g.SubjectTeachers!)
+                Semester1 = s.SubjectTeachers!
                     .SelectMany(st => st.Subjectteachersemesters!)
                     .Any(sts => sts.Semester1 == true),
 
-                Semester2 = s.CnSpecNavigation!
-                    .Groups!
-                    .SelectMany(g => g.SubjectTeachers!)
+                Semester2 = s.SubjectTeachers!
                     .SelectMany(st => st.Subjectteachersemesters!)
                     .Any(sts => sts.Semester2 == true),
 
-                Course = s.CnSpecNavigation!
-                    .Groups!
-                    .Select(g => g.Cours)
+                Course = s.SubjectTeachers!
+                    .Select(st => st.CnGNavigation!.Cours)
                     .Distinct()
                     .OrderBy(c => c)
                     .FirstOrDefault(),
 
-                GroupsFlat = s.CnSpecNavigation!
-                    .Groups!
-                    .Where(g => !string.IsNullOrEmpty(g.Name))
-                    .Select(g => new
+                GroupsFlat = s.SubjectTeachers!
+                    .Where(st => st.CnGNavigation != null && !string.IsNullOrEmpty(st.CnGNavigation.Name))
+                    .Select(st => new
                     {
-                        GroupName = g.Name!,
-                        SpecName  = g.CnSpecNavigation != null 
-                            ? g.CnSpecNavigation.Name ?? "Без специальности"
+                        GroupName = st.CnGNavigation!.Name!,
+                        SpecName  = st.CnGNavigation!.CnSpecNavigation != null
+                            ? st.CnGNavigation!.CnSpecNavigation.Name ?? "Без специальности"
                             : "Без специальности"
                     })
             }).ToListAsync(ct);
@@ -80,4 +74,4 @@ public class SubjectRepository : BaseRepository<Subject>, ISubjectRepository
                 )
         )).ToList();;
     }
-}
+    }
