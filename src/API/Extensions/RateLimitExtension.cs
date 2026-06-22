@@ -3,21 +3,22 @@ using System.Threading.RateLimiting;
 namespace API.Extensions;
 
 public static class RateLimitExtension
-{
+    {
     public static IServiceCollection AddRateLimit(this IServiceCollection services)
     {
         services.AddRateLimiter(options =>
         {
+
             options.AddPolicy("DefaultLimiter", context =>
             {
                 return RateLimitPartition.GetTokenBucketLimiter(GetUserKey(context), _ => new TokenBucketRateLimiterOptions
                     {
-                        TokenLimit = 50,
+                        TokenLimit = 200,
                         ReplenishmentPeriod = TimeSpan.FromSeconds(10),
-                        TokensPerPeriod = 25,
+                        TokensPerPeriod = 100,
                         AutoReplenishment = true,
                         QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
-                        QueueLimit = 5
+                        QueueLimit = 20
                     });
             });
 
@@ -33,13 +34,14 @@ public static class RateLimitExtension
 
             options.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, string>(context =>
             {
+
                 return RateLimitPartition.GetTokenBucketLimiter(GetUserKey(context), _ => new TokenBucketRateLimiterOptions
                 {
-                    TokenLimit = 150,
+                    TokenLimit = 1000,
                     ReplenishmentPeriod = TimeSpan.FromMinutes(1),
-                    TokensPerPeriod = 60,
+                    TokensPerPeriod = 600,
                     AutoReplenishment = true,
-                    QueueLimit = 10,
+                    QueueLimit = 100,
                     QueueProcessingOrder = QueueProcessingOrder.OldestFirst
                 });
             });
@@ -57,4 +59,4 @@ public static class RateLimitExtension
             ? $"user:{context.User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value}"
             : $"ip:{context.Connection.RemoteIpAddress?.ToString() ?? "unknown"}";
     }
-}
+    }

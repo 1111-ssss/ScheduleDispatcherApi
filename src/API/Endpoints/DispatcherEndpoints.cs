@@ -7,15 +7,19 @@ using Application.Features.Dispatcher.SaveWorkload;
 using Application.Features.Dispatcher.Commands.SaveDraftSchedule;
 using Application.Features.Dispatcher.FinalizeDaySchedule;
 using Application.Features.Dispatcher.GetAllLessons;
+using Application.Features.Dispatcher.GetCabinets;
+using Application.Features.Dispatcher.GetGroups;
+using Application.Features.Dispatcher.GetTeachers;
 
 namespace API.Endpoints;
 
 public static class DispatcherEndpoints
-{
+    {
     public static IEndpointRouteBuilder MapDispatcherEndpoints(this IEndpointRouteBuilder app)
     {
         var group = app.MapGroup("/api/dispatcher")
             .RequireRateLimiting("DefaultLimiter")
+            .RequireAuthorization()
             .WithTags("Функции диспетчера");
 
         group.MapGet("/get", GetWorkloadAsync)
@@ -59,6 +63,29 @@ public static class DispatcherEndpoints
             .WithDescription("Позволяет получить информацию о предметах, в каком семестре они проводятся, на каком курсу и списку групп.")
             .WithName("Get Lessons Info")
             .Produces<AllLessonsDTO>(StatusCodes.Status200OK)
+            .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
+
+        group.MapGet("/groups", GetGroupsAsync)
+            .WithSummary("Запрос на получение списка групп")
+            .WithDescription("Позволяет получить отсортированный список названий групп.")
+            .WithName("Get Groups")
+            .Produces<List<string>>(StatusCodes.Status200OK)
+            .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
+
+        group.MapGet("/teachers", GetTeachersAsync)
+            .WithSummary("Ростер преподавателей")
+            .WithDescription("Имена «Фамилия И. О.»; можно отфильтровать по group, lesson и semester.")
+            .WithName("Get Teachers")
+            .Accepts<GetTeachersQuery>("application/json")
+            .Produces<List<string>>(StatusCodes.Status200OK)
+            .Produces<ErrorResponse>(StatusCodes.Status400BadRequest)
+            .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
+
+        group.MapGet("/cabinets", GetCabinetsAsync)
+            .WithSummary("Кабинеты по категориям")
+            .WithDescription("Словарь «Компьютерные»/«Лекционные» со списками имён.")
+            .WithName("Get Cabinets")
+            .Produces<Dictionary<string, List<string>>>(StatusCodes.Status200OK)
             .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
         return group;
@@ -107,4 +134,29 @@ public static class DispatcherEndpoints
 
         return result.ToApiResult();
     }
-}
+    private static async Task<IResult> GetGroupsAsync(
+        [FromServices] IMediator _mediator
+    )
+    {
+        var result = await _mediator.Send(new GetGroupsQuery());
+
+        return result.ToApiResult();
+    }
+    private static async Task<IResult> GetTeachersAsync(
+        [FromServices] IMediator _mediator,
+        [AsParameters] GetTeachersQuery query
+    )
+    {
+        var result = await _mediator.Send(query);
+
+        return result.ToApiResult();
+    }
+    private static async Task<IResult> GetCabinetsAsync(
+        [FromServices] IMediator _mediator
+    )
+    {
+        var result = await _mediator.Send(new GetCabinetsQuery());
+
+        return result.ToApiResult();
+    }
+    }

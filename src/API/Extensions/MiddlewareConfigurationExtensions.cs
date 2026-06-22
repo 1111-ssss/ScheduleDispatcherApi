@@ -3,7 +3,7 @@ using Scalar.AspNetCore;
 namespace API.Extensions;
 
 public static class MiddlewareConfigurationExtensions
-{
+    {
     public static WebApplication UseCustomMiddleware(this WebApplication app)
     {
         if (app.Environment.IsDevelopment())
@@ -27,7 +27,8 @@ public static class MiddlewareConfigurationExtensions
         app.UseHttpsRedirection();
         app.UseAuthentication();
         app.UseAuthorization();
+        app.UseApiVersioning();
 
         return app;
     }
-}
+        }

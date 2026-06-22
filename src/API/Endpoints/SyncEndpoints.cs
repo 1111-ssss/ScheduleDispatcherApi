@@ -6,11 +6,12 @@ using Application.Features.Sync.SyncData;
 namespace API.Endpoints;
 
 public static class SyncEndpoints
-{
+    {
     public static IEndpointRouteBuilder MapSyncEndpoints(this IEndpointRouteBuilder app)
     {
         var group = app.MapGroup("/api/sync")
             .RequireRateLimiting("StrictLimiter")
+            .RequireAuthorization()
             .WithTags("Синхронизация с Единым Колледжем");
 
         group.MapPost("/", SyncDataAsync)
@@ -30,4 +31,4 @@ public static class SyncEndpoints
 
         return result.ToApiResult();
     }
-}
+    }
