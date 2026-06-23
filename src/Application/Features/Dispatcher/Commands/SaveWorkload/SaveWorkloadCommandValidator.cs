@@ -4,9 +4,29 @@ using FluentValidation;
 namespace Application.Features.Dispatcher.SaveWorkload;
 
 public class SaveWorkloadCommandValidator : AbstractValidator<SaveWorkloadCommand>
-{
+    {
     public SaveWorkloadCommandValidator()
     {
+        
+        RuleFor(x => x.Lesson)
+            .NotEmpty().WithState(_ => ErrorCode.InvalidLessonName)
+            .WithMessage("Поле {PropertyName} не может быть пустым")
+            .MaximumLength(100).WithState(_ => ErrorCode.InvalidLessonName)
+            .WithMessage("Поле {PropertyName} должно быть не больше 100 символов");
+        RuleFor(x => x.Teacher)
+            .NotEmpty().WithState(_ => ErrorCode.InvalidTeacherName)
+            .WithMessage("Поле {PropertyName} не может быть пустым")
+            .MaximumLength(100).WithState(_ => ErrorCode.InvalidTeacherName)
+            .WithMessage("Поле {PropertyName} должно быть не больше 100 символов");
+        RuleFor(x => x.Group)
+            .NotEmpty().WithState(_ => ErrorCode.InvalidGroupName)
+            .WithMessage("Поле {PropertyName} не может быть пустым")
+            .MaximumLength(50).WithState(_ => ErrorCode.InvalidGroupName)
+            .WithMessage("Поле {PropertyName} должно быть не больше 50 символов");
+        RuleFor(x => x.Semester)
+            .InclusiveBetween(1, 2).WithState(_ => ErrorCode.InvalidSemester)
+            .WithMessage("Поле {PropertyName} должно быть 1 или 2");
+
         RuleFor(x => x.WorkloadSummary)
             .NotEmpty().WithState(_ => ErrorCode.InvalidWorkloadSummary)
             .WithMessage("Поле {PropertyName} не может быть пустым")
@@ -29,16 +49,10 @@ public class SaveWorkloadCommandValidator : AbstractValidator<SaveWorkloadComman
                             .WithMessage("Поле {PropertyName} не может быть пустым")
                             .GreaterThan(0).WithState(_ => ErrorCode.InvalidWorkload)
                             .WithMessage("Поле {PropertyName} должно быть больше 0");
-                        workLoadList.RuleFor(x => x.LessonDate1)
-                            .NotEmpty().WithState(_ => ErrorCode.InvalidWorkload)
-                            .WithMessage("Поле {PropertyName} не может быть пустым")
-                            .Must(x => x >= DateTime.Today).WithState(_ => ErrorCode.InvalidWorkload)
-                            .WithMessage("Поле {PropertyName} должно быть больше или равно сегодняшнему дню");
-                        workLoadList.RuleFor(x => x.LessonDate2)
-                            .NotEmpty().WithState(_ => ErrorCode.InvalidWorkload)
-                            .WithMessage("Поле {PropertyName} не может быть пустым")
-                            .Must(x => x >= DateTime.Today).WithState(_ => ErrorCode.InvalidWorkload)
-                            .WithMessage("Поле {PropertyName} должно быть больше или равно сегодняшнему дню");
+
+                        workLoadList.RuleFor(x => x.LessonType)
+                            .MaximumLength(50).WithState(_ => ErrorCode.InvalidWorkload)
+                            .WithMessage("Поле {PropertyName} должно быть не больше 50 символов");
                         
                     });
                 RuleForEach(x => x.WorkloadSummary.RemovalList)
@@ -64,4 +78,4 @@ public class SaveWorkloadCommandValidator : AbstractValidator<SaveWorkloadComman
                     });
             });
     }
-}
+    }
