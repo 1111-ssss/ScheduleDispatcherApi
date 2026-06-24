@@ -10,7 +10,7 @@ using Microsoft.Extensions.Logging;
 namespace Application.Features.Dispatcher.SaveWorkload;
 
 public class GetWorkloadQueryHandler : IRequestHandler<GetWorkloadQuery, Result<WorkloadSummaryDTO>>
-{
+    {
     private readonly ILogger<GetWorkloadQueryHandler> _logger;
     private readonly IBaseRepository<Employer> _employerRepository;
 
@@ -53,14 +53,17 @@ public class GetWorkloadQueryHandler : IRequestHandler<GetWorkloadQuery, Result<
             .ToList();
 
         return Result<WorkloadSummaryDTO>.Success(new WorkloadSummaryDTO(
+
             WorkloadList: allSchedules.Select(item => new WorkloadDTO(
                 item.SubjectName,
                 item.Schedule.Lessonnumber ?? 0,
                 item.IsSplit ?? false,
-                item.Schedule.Date1 ?? DateTime.MinValue,
-                item.Schedule.Date2 ?? DateTime.MinValue,
-                item.Schedule.RemovalAsFirst?.IdRemoval ?? item.Schedule.RemovalAsSecond?.IdRemoval ?? 0
-            )).ToList(),
+
+                item.Schedule.Date1,
+                item.Schedule.Date2,
+                item.Schedule.RemovalAsFirst?.IdRemoval ?? item.Schedule.RemovalAsSecond?.IdRemoval ?? 0,
+                item.Schedule.LessonType ?? string.Empty
+            )).OrderBy(w => w.LessonIndex).ToList(),
 
             RemovalList: allSchedules
                 .SelectMany(item => new[] { item.Schedule.RemovalAsFirst, item.Schedule.RemovalAsSecond })
@@ -68,9 +71,10 @@ public class GetWorkloadQueryHandler : IRequestHandler<GetWorkloadQuery, Result<
                 .DistinctBy(r => r!.IdRemoval)
                 .Select(r => new RemovalDTO(
                     r!.IdRemoval,
-                    r!.IdSchedule1,
-                    r!.IdSchedule2
+                    
+                    r!.IdSchedule1Navigation?.Lessonnumber ?? 0,
+                    r!.IdSchedule2Navigation?.Lessonnumber ?? 0
                 )).ToList()
         ));
     }
-}
+    }
