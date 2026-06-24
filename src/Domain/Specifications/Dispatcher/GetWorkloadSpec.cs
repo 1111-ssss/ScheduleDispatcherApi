@@ -5,11 +5,13 @@ using Domain.Entities;
 namespace Domain.Specifications.Dispatcher;
 
 public class GetWorkloadSpec : Specification<Employer>
-{
+    {
     public GetWorkloadSpec(string teacher, string group, int semester, string lesson)
     {
+
+        var normalizedTeacher = teacher.Replace(" ", string.Empty);
         Query
-            .Where(e => (e.Surname + " " + e.Name.Substring(0, 1) + ". " + e.FatherName.Substring(0, 1) + ".") == teacher)
+            .Where(e => (e.Surname + " " + e.Name.Substring(0, 1) + ". " + e.FatherName.Substring(0, 1) + ".").Replace(" ", string.Empty) == normalizedTeacher)
             .Where(e => e.Teachers.Any(
                 t => t.SubjectTeachers.Any(
                     st => st.CnGNavigation.Name == group
@@ -52,4 +54,4 @@ public class GetWorkloadSpec : Specification<Employer>
 
             .AsSplitQuery();
     }
-}
+    }

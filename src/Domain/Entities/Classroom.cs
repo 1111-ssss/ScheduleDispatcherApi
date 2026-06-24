@@ -1,4 +1,4 @@
-﻿namespace Domain.Entities;
+namespace Domain.Entities;
 
 public partial class Classroom
 {
@@ -7,6 +7,8 @@ public partial class Classroom
     public int? ClassroomNumber { get; set; }
 
     public bool? IsPcClassroom { get; set; }
+
+        public string? Name { get; set; }
 
     public virtual ICollection<Subject> IdSubjects { get; set; } = new List<Subject>();
 }

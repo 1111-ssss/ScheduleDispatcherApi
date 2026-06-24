@@ -14,6 +14,8 @@ public partial class Schedule
 
     public bool? IsOver { get; set; }
 
+    public string LessonType { get; set; } = string.Empty;
+
     public virtual Exam? Exam { get; set; }
 
     public virtual Okr? Okr { get; set; }
