@@ -4,7 +4,7 @@ using FluentValidation;
 namespace Application.Features.Dispatcher.Commands.SaveDraftSchedule;
 
 public class SaveDraftScheduleCommandValidator : AbstractValidator<SaveDraftScheduleCommand>
-{
+    {
     public SaveDraftScheduleCommandValidator()
     {
         RuleFor(x => x.GroupName)
@@ -15,9 +15,7 @@ public class SaveDraftScheduleCommandValidator : AbstractValidator<SaveDraftSche
 
         RuleFor(x => x.Date)
             .NotEmpty().WithState(_ => ErrorCode.InvalidDate)
-            .WithMessage("Поле {PropertyName} не может быть пустым")
-            .Must(x => x >= DateOnly.FromDateTime(DateTime.Today)).WithState(_ => ErrorCode.InvalidDate)
-            .WithMessage("Поле {PropertyName} должно быть больше или равно сегодняшнему дню");
+            .WithMessage("Поле {PropertyName} не может быть пустым");
 
         RuleFor(x => x.Lessons)
             .NotEmpty().WithState(_ => ErrorCode.InvalidWorkload)
@@ -46,6 +44,9 @@ public class SaveDraftScheduleCommandValidator : AbstractValidator<SaveDraftSche
                 lesson.RuleFor(x => x.Classroom1)
                     .NotEmpty().WithState(_ => ErrorCode.InvalidWorkload)
                     .WithMessage("Поле {PropertyName} не может быть пустым");
+                lesson.RuleFor(x => x.LessonType)
+                    .MaximumLength(50).WithState(_ => ErrorCode.InvalidWorkload)
+                    .WithMessage("Поле {PropertyName} должно быть не больше 50 символов");
             });
     }
-}
+    }

@@ -1,4 +1,4 @@
-﻿using Application.Abstractions.Repository.Custom;
+using Application.Abstractions.Repository.Custom;
 using Application.Features.Dispatcher.Commands.SaveDraftSchedule;
 using Domain.Entities;
 using Domain.Model.Result;
@@ -7,7 +7,7 @@ using MediatR;
 namespace Application.Features.ScheduleDraft.Handlers;
 
 public class SaveDraftScheduleCommandHandler : IRequestHandler<SaveDraftScheduleCommand, Result>
-{
+    {
     private readonly IScheduleDraftRepository _repository;
 
     public SaveDraftScheduleCommandHandler(IScheduleDraftRepository repository)
@@ -28,10 +28,11 @@ public class SaveDraftScheduleCommandHandler : IRequestHandler<SaveDraftSchedule
             Teacher2 = l.Teacher2,
             Classroom1 = l.Classroom1,
             Classroom2 = l.Classroom2,
-            Split = l.Split
+            Split = l.Split,
+            LessonType = l.LessonType ?? string.Empty
         }).ToList();
 
         await _repository.SaveDraftAsync(command.GroupName, command.Date, lessons, ct);
         return Result.Success();
     }
-}
+    }
