@@ -10,7 +10,7 @@ using MediatR;
 namespace Application.Features.ScheduleFinalize.Handlers;
 
 public class FinalizeDayScheduleCommandHandler : IRequestHandler<FinalizeDayScheduleCommand, Result>
-{
+    {
     private readonly IScheduleDraftRepository _repository;
     private readonly IPublishEndpoint _publishEndpoint;
 
@@ -40,15 +40,15 @@ public class FinalizeDayScheduleCommandHandler : IRequestHandler<FinalizeDaySche
                     StartTime = l.StartTime,
                     EndTime = l.EndTime,
                     Lesson1 = l.Subject1,
-                    Lesson2 = l.Subject2,
+                    Lesson2 = l.Subject2 ?? string.Empty,
                     Fio1 = l.Teacher1,
-                    Fio2 = l.Teacher2,
+                    Fio2 = l.Teacher2 ?? string.Empty,
                     ClassRoom1 = l.Classroom1,
-                    ClassRoom2 = l.Classroom2
+                    ClassRoom2 = l.Classroom2 ?? string.Empty
                 }).ToList()
         };
 
         await _publishEndpoint.Publish(dto, ct);
         return Result.Success();
     }
-}
+    }

@@ -1,4 +1,4 @@
-﻿namespace Application.Features.Dispatcher.Common;
+namespace Application.Features.Dispatcher.Common;
 
 public class LessonDraftDTO
 {
@@ -12,4 +12,6 @@ public class LessonDraftDTO
     public string Classroom1 { get; init; } = default!;
     public string? Classroom2 { get; init; }
     public bool Split { get; init; }
+    
+    public string LessonType { get; init; } = string.Empty;
 }
