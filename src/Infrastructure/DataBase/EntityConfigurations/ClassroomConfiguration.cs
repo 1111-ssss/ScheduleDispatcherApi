@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 namespace Infrastructure.DataBase.EntityConfigurations;
 
 public class ClassroomConfiguration : IEntityTypeConfiguration<Classroom>
-{
+    {
     public void Configure(EntityTypeBuilder<Classroom> entity)
     {
         entity.HasKey(e => e.IdClassroom).HasName("classrooms_pkey");
@@ -21,5 +21,9 @@ public class ClassroomConfiguration : IEntityTypeConfiguration<Classroom>
 
         entity.Property(e => e.IsPcClassroom)
             .HasColumnName("is_pc_classroom");
+
+        entity.Property(e => e.Name)
+            .HasColumnName("name")
+            .HasMaxLength(20);
     }
-}
+    }

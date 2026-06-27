@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 namespace Infrastructure.DataBase.EntityConfigurations;
 
 public class ScheduleConfiguration : IEntityTypeConfiguration<Schedule>
-{
+    {
     public void Configure(EntityTypeBuilder<Schedule> entity)
     {
         entity.HasKey(e => e.IdSchedule).HasName("schedule_pkey");
@@ -24,5 +24,6 @@ public class ScheduleConfiguration : IEntityTypeConfiguration<Schedule>
         entity.Property(e => e.IsOver).HasColumnName("is_over");
         entity.Property(e => e.IsPractical).HasColumnName("is_practical");
         entity.Property(e => e.Lessonnumber).HasColumnName("lessonnumber");
+        entity.Property(e => e.LessonType).HasColumnName("lesson_type").HasMaxLength(50);
     }
-}
+    }

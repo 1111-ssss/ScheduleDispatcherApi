@@ -1,4 +1,4 @@
-﻿using Domain.Entities;
+using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -6,7 +6,7 @@ namespace Infrastructure.DataBase.EntityConfigurations;
 
 
 public class LessonConfiguration : IEntityTypeConfiguration<LessonEntity>
-{
+    {
     public void Configure(EntityTypeBuilder<LessonEntity> builder)
     {
         builder.ToTable("lessons");
@@ -24,5 +24,6 @@ public class LessonConfiguration : IEntityTypeConfiguration<LessonEntity>
         builder.Property(x => x.EndTime).HasColumnName("endtime").IsRequired();
         builder.Property(x => x.LessonNumber).HasColumnName("LessonNumber").IsRequired();
         builder.Property(x => x.Split).HasColumnName("split").IsRequired();
+        builder.Property(x => x.LessonType).HasColumnName("lesson_type").HasMaxLength(50);
     }
-}
+    }
