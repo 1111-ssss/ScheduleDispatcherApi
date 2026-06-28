@@ -17,6 +17,11 @@ public class SaveWorkloadCommandHandlerTests
     private readonly Mock<IBaseRepository<Employer>> _employerRepositoryMock;
     private readonly Mock<IBaseRepository<Schedule>> _scheduleRepositoryMock;
     private readonly Mock<IBaseRepository<SubjectTeacherSchedule>> _stsRepositoryMock;
+    private readonly Mock<IBaseRepository<Removal>> _removalRepositoryMock;
+    private readonly Mock<IBaseRepository<Subject>> _subjectRepositoryMock;
+    private readonly Mock<IBaseRepository<Group>> _groupRepositoryMock;
+    private readonly Mock<IBaseRepository<SubjectTeacher>> _linkRepositoryMock;
+    private readonly Mock<IBaseRepository<SubjectTeacherSemester>> _semesterRepositoryMock;
     private readonly SaveWorkloadCommandHandler _handler;
 
     public SaveWorkloadCommandHandlerTests()
@@ -25,12 +30,26 @@ public class SaveWorkloadCommandHandlerTests
         _employerRepositoryMock = new Mock<IBaseRepository<Employer>>();
         _scheduleRepositoryMock = new Mock<IBaseRepository<Schedule>>();
         _stsRepositoryMock = new Mock<IBaseRepository<SubjectTeacherSchedule>>();
+        _removalRepositoryMock = new Mock<IBaseRepository<Removal>>();
+        _subjectRepositoryMock = new Mock<IBaseRepository<Subject>>();
+        _groupRepositoryMock = new Mock<IBaseRepository<Group>>();
+        _linkRepositoryMock = new Mock<IBaseRepository<SubjectTeacher>>();
+        _semesterRepositoryMock = new Mock<IBaseRepository<SubjectTeacherSemester>>();
+
+        _removalRepositoryMock
+            .Setup(r => r.AddAsync(It.IsAny<Removal>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync((Removal r, CancellationToken ct) => r);
 
         _handler = new SaveWorkloadCommandHandler(
             _loggerMock.Object,
             _employerRepositoryMock.Object,
             _scheduleRepositoryMock.Object,
-            _stsRepositoryMock.Object
+            _stsRepositoryMock.Object,
+            _removalRepositoryMock.Object,
+            _subjectRepositoryMock.Object,
+            _groupRepositoryMock.Object,
+            _linkRepositoryMock.Object,
+            _semesterRepositoryMock.Object
         );
     }
 
@@ -107,6 +126,15 @@ public class SaveWorkloadCommandHandlerTests
         var employer = CreateEmployer();
         _employerRepositoryMock
             .Setup(r => r.FirstOrDefaultAsync(It.IsAny<GetWorkloadSpec>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(employer);
+
+        // Предмета нет в справочнике — линк создать не из чего.
+        _subjectRepositoryMock
+            .Setup(r => r.FirstOrDefaultAsync(It.IsAny<SubjectByNameSpec>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync((Subject?)null);
+
+        _employerRepositoryMock
+            .Setup(r => r.FirstOrDefaultAsync(It.IsAny<EmployerByFioSpec>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(employer);
 
         var workloadSummary = new WorkloadSummaryDTO(
@@ -253,6 +281,148 @@ public class SaveWorkloadCommandHandlerTests
     }
 
     [Fact]
+    public async Task Handle_ShouldPersistRemoval_ByLessonIndex()
+    {
+        // Arrange: уроки с номерами 3 и 4, снятие (1, 3, 4) ссылается на НОМЕРА,
+        // а не на позиции в списке.
+        var employer = CreateEmployer();
+        _employerRepositoryMock
+            .Setup(r => r.FirstOrDefaultAsync(It.IsAny<GetWorkloadSpec>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(employer);
+
+        var nextId = 10;
+        var created = new List<Schedule>();
+        _scheduleRepositoryMock
+            .Setup(r => r.AddAsync(It.IsAny<Schedule>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync((Schedule s, CancellationToken ct) =>
+            {
+                s.IdSchedule = nextId++;
+                created.Add(s);
+                return s;
+            });
+
+        _stsRepositoryMock
+            .Setup(r => r.AddAsync(It.IsAny<SubjectTeacherSchedule>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync((SubjectTeacherSchedule sts, CancellationToken ct) => sts);
+
+        Removal? savedRemoval = null;
+        _removalRepositoryMock
+            .Setup(r => r.AddAsync(It.IsAny<Removal>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync((Removal r, CancellationToken ct) =>
+            {
+                savedRemoval = r;
+                return r;
+            });
+
+        var workloadSummary = new WorkloadSummaryDTO(
+            new List<WorkloadDTO>
+            {
+                new("Базы данных", 3, false, DateTime.Today.AddDays(1), DateTime.Today.AddDays(2), 0),
+                new("Базы данных", 4, false, DateTime.Today.AddDays(3), DateTime.Today.AddDays(4), 0)
+            },
+            new List<RemovalDTO> { new(1, 3, 4) }
+        );
+
+        var command = new SaveWorkloadCommand("Базы данных", "Иванов И. И.", "П21", 1, workloadSummary);
+
+        // Act
+        var result = await _handler.Handle(command, CancellationToken.None);
+
+        // Assert
+        result.IsSuccess.Should().BeTrue();
+        savedRemoval.Should().NotBeNull();
+        savedRemoval!.IdSchedule1.Should().Be(created[0].IdSchedule);
+        savedRemoval.IdSchedule2.Should().Be(created[1].IdSchedule);
+        _removalRepositoryMock.Verify(
+            r => r.AddAsync(It.IsAny<Removal>(), It.IsAny<CancellationToken>()), Times.Once);
+    }
+
+    [Fact]
+    public async Task Handle_ShouldAcceptNullDates_ForUndatedLessons()
+    {
+        // Arrange: хвост связки без дат (десктоп датирует при публикации).
+        var employer = CreateEmployer();
+        _employerRepositoryMock
+            .Setup(r => r.FirstOrDefaultAsync(It.IsAny<GetWorkloadSpec>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(employer);
+
+        Schedule? createdSchedule = null;
+        _scheduleRepositoryMock
+            .Setup(r => r.AddAsync(It.IsAny<Schedule>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync((Schedule s, CancellationToken ct) =>
+            {
+                s.IdSchedule = 1;
+                createdSchedule = s;
+                return s;
+            });
+
+        _stsRepositoryMock
+            .Setup(r => r.AddAsync(It.IsAny<SubjectTeacherSchedule>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync((SubjectTeacherSchedule sts, CancellationToken ct) => sts);
+
+        var workloadSummary = new WorkloadSummaryDTO(
+            new List<WorkloadDTO>
+            {
+                new("Базы данных", 1, false, null, null, 0)
+            },
+            new List<RemovalDTO>()
+        );
+
+        var command = new SaveWorkloadCommand("Базы данных", "Иванов И. И.", "П21", 1, workloadSummary);
+
+        // Act
+        var result = await _handler.Handle(command, CancellationToken.None);
+
+        // Assert
+        result.IsSuccess.Should().BeTrue();
+        createdSchedule.Should().NotBeNull();
+        createdSchedule!.Date1.Should().BeNull();
+        createdSchedule.Date2.Should().BeNull();
+    }
+
+    [Fact]
+    public async Task Handle_ShouldPersistLessonType_OnSchedule()
+    {
+        // Arrange
+        var employer = CreateEmployer();
+        _employerRepositoryMock
+            .Setup(r => r.FirstOrDefaultAsync(It.IsAny<GetWorkloadSpec>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(employer);
+
+        Schedule? createdSchedule = null;
+        _scheduleRepositoryMock
+            .Setup(r => r.AddAsync(It.IsAny<Schedule>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync((Schedule s, CancellationToken ct) =>
+            {
+                s.IdSchedule = 1;
+                createdSchedule = s;
+                return s;
+            });
+
+        _stsRepositoryMock
+            .Setup(r => r.AddAsync(It.IsAny<SubjectTeacherSchedule>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync((SubjectTeacherSchedule sts, CancellationToken ct) => sts);
+
+        var workloadSummary = new WorkloadSummaryDTO(
+            new List<WorkloadDTO>
+            {
+                new("Базы данных", 1, false, DateTime.Today.AddDays(1), DateTime.Today.AddDays(2), 0, "Лабораторная")
+            },
+            new List<RemovalDTO>()
+        );
+
+        var command = new SaveWorkloadCommand("Базы данных", "Иванов И. И.", "П21", 1, workloadSummary);
+
+        // Act
+        var result = await _handler.Handle(command, CancellationToken.None);
+
+        // Assert
+        result.IsSuccess.Should().BeTrue();
+        createdSchedule.Should().NotBeNull();
+        createdSchedule!.LessonType.Should().Be("Лабораторная");
+    }
+
+    [Fact]
     public async Task Handle_ShouldReturnDatabaseError_WhenExceptionOccurs()
     {
         // Arrange
@@ -289,6 +459,105 @@ public class SaveWorkloadCommandHandlerTests
                 It.IsAny<Exception>(),
                 It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
             Times.Once);
+    }
+
+    [Fact]
+    public async Task Handle_ShouldCreateLink_WhenReplacementTeacherHasNoBinding()
+    {
+        // Замена: учитель предмет в группе не ведёт (связки нет),
+        // но предмет и группа существуют — линк создаётся, факт сохраняется.
+        var employer = CreateEmployerWithoutLink();
+        _employerRepositoryMock
+            .Setup(r => r.FirstOrDefaultAsync(It.IsAny<GetWorkloadSpec>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(employer);
+
+        _employerRepositoryMock
+            .Setup(r => r.FirstOrDefaultAsync(It.IsAny<EmployerByFioSpec>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(employer);
+
+        _subjectRepositoryMock
+            .Setup(r => r.FirstOrDefaultAsync(It.IsAny<SubjectByNameSpec>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new Subject { IdSubject = 5, Name = "Базы данных", CnSpec = "09.02.07" });
+
+        _groupRepositoryMock
+            .Setup(r => r.FirstOrDefaultAsync(It.IsAny<GroupByCnGSpec>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new Group { CnG = "П21", Name = "П21", Cours = 2, CnSpec = "09.02.07" });
+
+        _linkRepositoryMock
+            .Setup(r => r.FirstOrDefaultAsync(It.IsAny<SubjectTeacherLinkSpec>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync((SubjectTeacher?)null);
+
+        _linkRepositoryMock
+            .Setup(r => r.AddAsync(It.IsAny<SubjectTeacher>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync((SubjectTeacher st, CancellationToken ct) =>
+            {
+                st.IdsubjectTeacher = 7;
+                return st;
+            });
+
+        _semesterRepositoryMock
+            .Setup(r => r.AddAsync(It.IsAny<SubjectTeacherSemester>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync((SubjectTeacherSemester s, CancellationToken ct) => s);
+
+        _scheduleRepositoryMock
+            .Setup(r => r.AddAsync(It.IsAny<Schedule>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync((Schedule s, CancellationToken ct) =>
+            {
+                s.IdSchedule = 1;
+                return s;
+            });
+
+        _stsRepositoryMock
+            .Setup(r => r.AddAsync(It.IsAny<SubjectTeacherSchedule>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync((SubjectTeacherSchedule sts, CancellationToken ct) => sts);
+
+        var workloadSummary = new WorkloadSummaryDTO(
+            new List<WorkloadDTO>
+            {
+                new("Базы данных", 1, false, DateTime.Today, null, 0)
+            },
+            new List<RemovalDTO>()
+        );
+
+        var command = new SaveWorkloadCommand("Базы данных", "Иванов И. И.", "П21", 1, workloadSummary);
+
+        // Act
+        var result = await _handler.Handle(command, CancellationToken.None);
+
+        // Assert
+        result.IsSuccess.Should().BeTrue();
+        _linkRepositoryMock.Verify(
+            r => r.AddAsync(It.Is<SubjectTeacher>(st => st.IdSubject == 5 && st.CnG == "П21" && st.CnT == "T001"),
+                It.IsAny<CancellationToken>()),
+            Times.Once);
+        _semesterRepositoryMock.Verify(
+            r => r.AddAsync(It.Is<SubjectTeacherSemester>(s => s.IdsubjectTeacher == 7 && s.Semester1 == true),
+                It.IsAny<CancellationToken>()),
+            Times.Once);
+        _scheduleRepositoryMock.Verify(r => r.AddAsync(It.IsAny<Schedule>(), It.IsAny<CancellationToken>()), Times.Once);
+    }
+
+    private static Employer CreateEmployerWithoutLink()
+    {
+        var employer = new Employer
+        {
+            CnE = "E001",
+            Surname = "Иванов",
+            Name = "Иван",
+            FatherName = "Иванович"
+        };
+
+        var teacher = new Teacher
+        {
+            CnT = "T001",
+            CnE = "E001",
+            CnENavigation = employer,
+            SubjectTeachers = new List<SubjectTeacher>()
+        };
+
+        employer.Teachers = new List<Teacher> { teacher };
+
+        return employer;
     }
 
     private static Employer CreateEmployer()
