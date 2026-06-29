@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 namespace Infrastructure.DataBase.EntityConfigurations;
 
 public class SpecialtyConfiguration : IEntityTypeConfiguration<Specialty>
-{
+    {
     public void Configure(EntityTypeBuilder<Specialty> entity)
     {
         entity.HasKey(e => e.CnSpec).HasName("specialty_pkey");
@@ -25,11 +25,12 @@ public class SpecialtyConfiguration : IEntityTypeConfiguration<Specialty>
         entity.Property(e => e.Fullname)
             .HasMaxLength(100)
             .HasColumnName("fullname");
-        entity.Property(e => e.Name).HasMaxLength(20);
+
+        entity.Property(e => e.Name).HasMaxLength(100);
 
         entity.HasOne(d => d.CnTNavigation).WithMany(p => p.Specialties)
             .HasForeignKey(d => d.CnT)
             .OnDelete(DeleteBehavior.ClientSetNull)
             .HasConstraintName("fk_specialty_teacher");
     }
-}
+    }

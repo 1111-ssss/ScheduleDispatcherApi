@@ -1,0 +1,836 @@
+
+using System;
+using Infrastructure.DataBase.Context;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
+
+#nullable disable
+
+namespace Infrastructure.Migrations
+    {
+    [DbContext(typeof(AppDbContext))]
+    [Migration("20261001013515_ClientCompat")]
+    partial class ClientCompat
+    {
+                protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        {
+#pragma warning disable 612, 618
+            modelBuilder
+                .HasAnnotation("ProductVersion", "10.0.0")
+                .HasAnnotation("Relational:MaxIdentifierLength", 63);
+
+            NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+
+            modelBuilder.Entity("Domain.Entities.Classroom", b =>
+                {
+                    b.Property<int>("IdClassroom")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id_classroom");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityAlwaysColumn(b.Property<int>("IdClassroom"));
+
+                    b.Property<int?>("ClassroomNumber")
+                        .HasColumnType("integer")
+                        .HasColumnName("classroom_number");
+
+                    b.Property<bool?>("IsPcClassroom")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_pc_classroom");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)")
+                        .HasColumnName("name");
+
+                    b.HasKey("IdClassroom")
+                        .HasName("classrooms_pkey");
+
+                    b.ToTable("classrooms", (string)null);
+                });
+
+            modelBuilder.Entity("Domain.Entities.Curator", b =>
+                {
+                    b.Property<int>("IdCurator")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id_curator");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityAlwaysColumn(b.Property<int>("IdCurator"));
+
+                    b.Property<string>("CnG")
+                        .IsRequired()
+                        .HasMaxLength(4)
+                        .HasColumnType("character varying(4)")
+                        .HasColumnName("cn_g");
+
+                    b.Property<string>("CnT")
+                        .IsRequired()
+                        .HasMaxLength(15)
+                        .HasColumnType("character varying(15)")
+                        .HasColumnName("cn_t");
+
+                    b.Property<bool>("Primary")
+                        .HasColumnType("boolean");
+
+                    b.HasKey("IdCurator")
+                        .HasName("curator_pkey");
+
+                    b.HasIndex("CnG");
+
+                    b.HasIndex("CnT");
+
+                    b.ToTable("curator", (string)null);
+                });
+
+            modelBuilder.Entity("Domain.Entities.DayScheduleEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityAlwaysColumn(b.Property<int>("Id"));
+
+                    b.Property<DateOnly>("Date")
+                        .HasColumnType("date")
+                        .HasColumnName("date");
+
+                    b.Property<string>("GroupName")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("group_name");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("day_schedule", (string)null);
+                });
+
+            modelBuilder.Entity("Domain.Entities.Employer", b =>
+                {
+                    b.Property<string>("CnE")
+                        .HasMaxLength(15)
+                        .HasColumnType("character varying(15)")
+                        .HasColumnName("cn_e");
+
+                    b.Property<string>("FatherName")
+                        .IsRequired()
+                        .HasMaxLength(35)
+                        .HasColumnType("character varying(35)")
+                        .HasColumnName("father_name");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(35)
+                        .HasColumnType("character varying(35)")
+                        .HasColumnName("name");
+
+                    b.Property<string>("Surname")
+                        .IsRequired()
+                        .HasMaxLength(35)
+                        .HasColumnType("character varying(35)")
+                        .HasColumnName("surname");
+
+                    b.HasKey("CnE")
+                        .HasName("employer_pkey");
+
+                    b.ToTable("employer", (string)null);
+                });
+
+            modelBuilder.Entity("Domain.Entities.Exam", b =>
+                {
+                    b.Property<int>("IdSchedule")
+                        .HasColumnType("integer")
+                        .HasColumnName("id_schedule");
+
+                    b.HasKey("IdSchedule")
+                        .HasName("exam_pkey");
+
+                    b.ToTable("exam", (string)null);
+                });
+
+            modelBuilder.Entity("Domain.Entities.Group", b =>
+                {
+                    b.Property<string>("CnG")
+                        .HasMaxLength(4)
+                        .HasColumnType("character varying(4)")
+                        .HasColumnName("cn_g");
+
+                    b.Property<string>("CnSpec")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("character varying(30)")
+                        .HasColumnName("cn_spec");
+
+                    b.Property<int>("Cours")
+                        .HasColumnType("integer")
+                        .HasColumnName("cours");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(4)
+                        .HasColumnType("character varying(4)");
+
+                    b.HasKey("CnG")
+                        .HasName("group_pkey");
+
+                    b.HasIndex("CnSpec");
+
+                    b.ToTable("group", (string)null);
+                });
+
+            modelBuilder.Entity("Domain.Entities.LessonEntity", b =>
+                {
+                    b.Property<int>("Groupid")
+                        .HasColumnType("integer")
+                        .HasColumnName("groupid");
+
+                    b.Property<int>("LessonNumber")
+                        .HasColumnType("integer")
+                        .HasColumnName("LessonNumber");
+
+                    b.Property<string>("Classroom1")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("classroom_1");
+
+                    b.Property<string>("Classroom2")
+                        .HasColumnType("text")
+                        .HasColumnName("classroom_2");
+
+                    b.Property<TimeOnly>("EndTime")
+                        .HasColumnType("time without time zone")
+                        .HasColumnName("endtime");
+
+                    b.Property<string>("LessonType")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)")
+                        .HasColumnName("lesson_type");
+
+                    b.Property<bool>("Split")
+                        .HasColumnType("boolean")
+                        .HasColumnName("split");
+
+                    b.Property<TimeOnly>("StartTime")
+                        .HasColumnType("time without time zone")
+                        .HasColumnName("starttime");
+
+                    b.Property<string>("Subject1")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("subject_1");
+
+                    b.Property<string>("Subject2")
+                        .HasColumnType("text")
+                        .HasColumnName("subject_2");
+
+                    b.Property<string>("Teacher1")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("teacher_1");
+
+                    b.Property<string>("Teacher2")
+                        .HasColumnType("text")
+                        .HasColumnName("teacher_2");
+
+                    b.HasKey("Groupid", "LessonNumber");
+
+                    b.ToTable("lessons", (string)null);
+                });
+
+            modelBuilder.Entity("Domain.Entities.Okr", b =>
+                {
+                    b.Property<int>("IdSchedule")
+                        .HasColumnType("integer")
+                        .HasColumnName("id_schedule");
+
+                    b.HasKey("IdSchedule")
+                        .HasName("okr_pkey");
+
+                    b.ToTable("okr", (string)null);
+                });
+
+            modelBuilder.Entity("Domain.Entities.Removal", b =>
+                {
+                    b.Property<int>("IdRemoval")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id_removal");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityAlwaysColumn(b.Property<int>("IdRemoval"));
+
+                    b.Property<int>("IdSchedule1")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("IdSchedule2")
+                        .HasColumnType("integer");
+
+                    b.HasKey("IdRemoval")
+                        .HasName("removal_pkey");
+
+                    b.HasIndex("IdSchedule1")
+                        .IsUnique();
+
+                    b.HasIndex("IdSchedule2")
+                        .IsUnique();
+
+                    b.ToTable("removal", (string)null);
+                });
+
+            modelBuilder.Entity("Domain.Entities.Schedule", b =>
+                {
+                    b.Property<int>("IdSchedule")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id_schedule");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityAlwaysColumn(b.Property<int>("IdSchedule"));
+
+                    b.Property<DateTime?>("Date1")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("date_1");
+
+                    b.Property<DateTime?>("Date2")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("date_2");
+
+                    b.Property<bool?>("IsOver")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_over");
+
+                    b.Property<bool?>("IsPractical")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_practical");
+
+                    b.Property<string>("LessonType")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)")
+                        .HasColumnName("lesson_type");
+
+                    b.Property<int?>("Lessonnumber")
+                        .HasColumnType("integer")
+                        .HasColumnName("lessonnumber");
+
+                    b.HasKey("IdSchedule")
+                        .HasName("schedule_pkey");
+
+                    b.ToTable("schedule", (string)null);
+                });
+
+            modelBuilder.Entity("Domain.Entities.Specialty", b =>
+                {
+                    b.Property<string>("CnSpec")
+                        .HasMaxLength(30)
+                        .HasColumnType("character varying(30)")
+                        .HasColumnName("cn_spec");
+
+                    b.Property<string>("CnT")
+                        .IsRequired()
+                        .HasMaxLength(15)
+                        .HasColumnType("character varying(15)")
+                        .HasColumnName("cn_t");
+
+                    b.Property<string>("Department")
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)")
+                        .HasColumnName("department");
+
+                    b.Property<int?>("Educationperiod")
+                        .HasColumnType("integer")
+                        .HasColumnName("educationperiod");
+
+                    b.Property<string>("Fullname")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("fullname");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.HasKey("CnSpec")
+                        .HasName("specialty_pkey");
+
+                    b.HasIndex("CnT");
+
+                    b.ToTable("specialty", (string)null);
+                });
+
+            modelBuilder.Entity("Domain.Entities.Subject", b =>
+                {
+                    b.Property<int>("IdSubject")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id_subject");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityAlwaysColumn(b.Property<int>("IdSubject"));
+
+                    b.Property<string>("CnSpec")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("character varying(30)")
+                        .HasColumnName("cn_spec");
+
+                    b.Property<string>("Fullname")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("fullname");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.Property<bool?>("Optional")
+                        .HasColumnType("boolean")
+                        .HasColumnName("optional");
+
+                    b.Property<bool>("PcClassNeed")
+                        .HasColumnType("boolean")
+                        .HasColumnName("pc_class_need");
+
+                    b.Property<int>("Practichourcount")
+                        .HasColumnType("integer")
+                        .HasColumnName("practichourcount");
+
+                    b.Property<int>("Totalhourcount")
+                        .HasColumnType("integer")
+                        .HasColumnName("totalhourcount");
+
+                    b.HasKey("IdSubject")
+                        .HasName("subject_pkey");
+
+                    b.HasIndex("CnSpec");
+
+                    b.ToTable("subject", (string)null);
+                });
+
+            modelBuilder.Entity("Domain.Entities.SubjectTeacher", b =>
+                {
+                    b.Property<int>("IdsubjectTeacher")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("idsubject_teacher");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityAlwaysColumn(b.Property<int>("IdsubjectTeacher"));
+
+                    b.Property<string>("CnG")
+                        .IsRequired()
+                        .HasMaxLength(4)
+                        .HasColumnType("character varying(4)")
+                        .HasColumnName("cn_g");
+
+                    b.Property<string>("CnT")
+                        .IsRequired()
+                        .HasMaxLength(15)
+                        .HasColumnType("character varying(15)")
+                        .HasColumnName("cn_t");
+
+                    b.Property<int>("IdSubject")
+                        .HasColumnType("integer")
+                        .HasColumnName("id_subject");
+
+                    b.HasKey("IdsubjectTeacher")
+                        .HasName("subject_teacher_pkey");
+
+                    b.HasIndex("CnG");
+
+                    b.HasIndex("CnT");
+
+                    b.HasIndex("IdSubject");
+
+                    b.ToTable("subject_teacher", (string)null);
+                });
+
+            modelBuilder.Entity("Domain.Entities.SubjectTeacherSchedule", b =>
+                {
+                    b.Property<int>("IdsubjectTeacher")
+                        .HasColumnType("integer")
+                        .HasColumnName("idsubject_teacher");
+
+                    b.Property<int>("IdSchedule")
+                        .HasColumnType("integer")
+                        .HasColumnName("id_schedule");
+
+                    b.Property<int?>("ExaminationHours")
+                        .HasColumnType("integer")
+                        .HasColumnName("examination_hours");
+
+                    b.Property<bool?>("GroupSplit")
+                        .HasColumnType("boolean")
+                        .HasColumnName("group_split");
+
+                    b.Property<int?>("LectureHours1term")
+                        .HasColumnType("integer")
+                        .HasColumnName("lecture_hours_1term");
+
+                    b.Property<int?>("LectureHours2term")
+                        .HasColumnType("integer")
+                        .HasColumnName("lecture_hours_2term");
+
+                    b.Property<int?>("PracticalHours1term")
+                        .HasColumnType("integer")
+                        .HasColumnName("practical_hours_1term");
+
+                    b.Property<int?>("PracticalHours2term")
+                        .HasColumnType("integer")
+                        .HasColumnName("practical_hours_2term");
+
+                    b.HasKey("IdsubjectTeacher", "IdSchedule")
+                        .HasName("subject_teacher_schedule_pkey");
+
+                    b.HasIndex("IdSchedule");
+
+                    b.ToTable("subject_teacher_schedule", (string)null);
+                });
+
+            modelBuilder.Entity("Domain.Entities.SubjectTeacherSemester", b =>
+                {
+                    b.Property<int>("IdsubjectTeacherSemester")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("idsubject_teacher_semester");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityAlwaysColumn(b.Property<int>("IdsubjectTeacherSemester"));
+
+                    b.Property<int>("IdsubjectTeacher")
+                        .HasColumnType("integer")
+                        .HasColumnName("idsubject_teacher");
+
+                    b.Property<bool?>("Semester1")
+                        .HasColumnType("boolean")
+                        .HasColumnName("semester1");
+
+                    b.Property<bool?>("Semester2")
+                        .HasColumnType("boolean")
+                        .HasColumnName("semester2");
+
+                    b.HasKey("IdsubjectTeacherSemester")
+                        .HasName("subject_teacher_semester_pkey");
+
+                    b.HasIndex("IdsubjectTeacher");
+
+                    b.ToTable("subject_teacher_semester", (string)null);
+                });
+
+            modelBuilder.Entity("Domain.Entities.Teacher", b =>
+                {
+                    b.Property<string>("CnT")
+                        .HasMaxLength(15)
+                        .HasColumnType("character varying(15)")
+                        .HasColumnName("cn_t");
+
+                    b.Property<string>("CnE")
+                        .IsRequired()
+                        .HasMaxLength(15)
+                        .HasColumnType("character varying(15)")
+                        .HasColumnName("cn_e");
+
+                    b.Property<int?>("Idcategory")
+                        .HasColumnType("integer")
+                        .HasColumnName("idcategory");
+
+                    b.Property<int?>("Idck")
+                        .HasColumnType("integer")
+                        .HasColumnName("idck");
+
+                    b.HasKey("CnT")
+                        .HasName("teacher_pkey");
+
+                    b.HasIndex("CnE");
+
+                    b.ToTable("teacher", (string)null);
+                });
+
+            modelBuilder.Entity("Domain.Entities.User", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("PasswordHash")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("LimitationOnChoiceOfAudienceSubject", b =>
+                {
+                    b.Property<int>("IdSubject")
+                        .HasColumnType("integer")
+                        .HasColumnName("id_subject");
+
+                    b.Property<int>("IdClassroom")
+                        .HasColumnType("integer")
+                        .HasColumnName("id_classroom");
+
+                    b.HasKey("IdSubject", "IdClassroom")
+                        .HasName("limitation_on_choice_of_audience_subject_pkey");
+
+                    b.HasIndex("IdClassroom");
+
+                    b.ToTable("limitation_on_choice_of_audience_subject", (string)null);
+                });
+
+            modelBuilder.Entity("Domain.Entities.Curator", b =>
+                {
+                    b.HasOne("Domain.Entities.Group", "CnGNavigation")
+                        .WithMany("Curators")
+                        .HasForeignKey("CnG")
+                        .IsRequired()
+                        .HasConstraintName("fk_curator_group");
+
+                    b.HasOne("Domain.Entities.Teacher", "CnTNavigation")
+                        .WithMany("Curators")
+                        .HasForeignKey("CnT")
+                        .IsRequired()
+                        .HasConstraintName("fk_curator_teacher");
+
+                    b.Navigation("CnGNavigation");
+
+                    b.Navigation("CnTNavigation");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Exam", b =>
+                {
+                    b.HasOne("Domain.Entities.Schedule", "IdScheduleNavigation")
+                        .WithOne("Exam")
+                        .HasForeignKey("Domain.Entities.Exam", "IdSchedule")
+                        .IsRequired()
+                        .HasConstraintName("fk_exam_schedule");
+
+                    b.Navigation("IdScheduleNavigation");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Group", b =>
+                {
+                    b.HasOne("Domain.Entities.Specialty", "CnSpecNavigation")
+                        .WithMany("Groups")
+                        .HasForeignKey("CnSpec")
+                        .IsRequired()
+                        .HasConstraintName("fk_group_specialty");
+
+                    b.Navigation("CnSpecNavigation");
+                });
+
+            modelBuilder.Entity("Domain.Entities.LessonEntity", b =>
+                {
+                    b.HasOne("Domain.Entities.DayScheduleEntity", "daySchedule")
+                        .WithMany("Lessons")
+                        .HasForeignKey("Groupid")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("daySchedule");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Okr", b =>
+                {
+                    b.HasOne("Domain.Entities.Schedule", "IdScheduleNavigation")
+                        .WithOne("Okr")
+                        .HasForeignKey("Domain.Entities.Okr", "IdSchedule")
+                        .IsRequired()
+                        .HasConstraintName("fk_okr_schedule");
+
+                    b.Navigation("IdScheduleNavigation");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Removal", b =>
+                {
+                    b.HasOne("Domain.Entities.Schedule", "IdSchedule1Navigation")
+                        .WithOne("RemovalAsFirst")
+                        .HasForeignKey("Domain.Entities.Removal", "IdSchedule1")
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.Schedule", "IdSchedule2Navigation")
+                        .WithOne("RemovalAsSecond")
+                        .HasForeignKey("Domain.Entities.Removal", "IdSchedule2")
+                        .IsRequired();
+
+                    b.Navigation("IdSchedule1Navigation");
+
+                    b.Navigation("IdSchedule2Navigation");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Specialty", b =>
+                {
+                    b.HasOne("Domain.Entities.Teacher", "CnTNavigation")
+                        .WithMany("Specialties")
+                        .HasForeignKey("CnT")
+                        .IsRequired()
+                        .HasConstraintName("fk_specialty_teacher");
+
+                    b.Navigation("CnTNavigation");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Subject", b =>
+                {
+                    b.HasOne("Domain.Entities.Specialty", "CnSpecNavigation")
+                        .WithMany("Subjects")
+                        .HasForeignKey("CnSpec")
+                        .IsRequired()
+                        .HasConstraintName("fk_subject_specialty");
+
+                    b.Navigation("CnSpecNavigation");
+                });
+
+            modelBuilder.Entity("Domain.Entities.SubjectTeacher", b =>
+                {
+                    b.HasOne("Domain.Entities.Group", "CnGNavigation")
+                        .WithMany("SubjectTeachers")
+                        .HasForeignKey("CnG")
+                        .IsRequired()
+                        .HasConstraintName("fk_subj_teacher_group");
+
+                    b.HasOne("Domain.Entities.Teacher", "CnTNavigation")
+                        .WithMany("SubjectTeachers")
+                        .HasForeignKey("CnT")
+                        .IsRequired()
+                        .HasConstraintName("fk_subj_teacher_teacher");
+
+                    b.HasOne("Domain.Entities.Subject", "IdSubjectNavigation")
+                        .WithMany("SubjectTeachers")
+                        .HasForeignKey("IdSubject")
+                        .IsRequired()
+                        .HasConstraintName("fk_subj_teacher_subject");
+
+                    b.Navigation("CnGNavigation");
+
+                    b.Navigation("CnTNavigation");
+
+                    b.Navigation("IdSubjectNavigation");
+                });
+
+            modelBuilder.Entity("Domain.Entities.SubjectTeacherSchedule", b =>
+                {
+                    b.HasOne("Domain.Entities.Schedule", "IdScheduleNavigation")
+                        .WithMany("SubjectTeacherSchedules")
+                        .HasForeignKey("IdSchedule")
+                        .IsRequired()
+                        .HasConstraintName("fk_sts_schedule");
+
+                    b.HasOne("Domain.Entities.SubjectTeacher", "IdsubjectTeacherNavigation")
+                        .WithMany("SubjectTeacherSchedules")
+                        .HasForeignKey("IdsubjectTeacher")
+                        .IsRequired()
+                        .HasConstraintName("fk_sts_subj_teacher");
+
+                    b.Navigation("IdScheduleNavigation");
+
+                    b.Navigation("IdsubjectTeacherNavigation");
+                });
+
+            modelBuilder.Entity("Domain.Entities.SubjectTeacherSemester", b =>
+                {
+                    b.HasOne("Domain.Entities.SubjectTeacher", "IdsubjectTeacherNavigation")
+                        .WithMany("Subjectteachersemesters")
+                        .HasForeignKey("IdsubjectTeacher")
+                        .IsRequired()
+                        .HasConstraintName("fk_stsem_subj_teacher");
+
+                    b.Navigation("IdsubjectTeacherNavigation");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Teacher", b =>
+                {
+                    b.HasOne("Domain.Entities.Employer", "CnENavigation")
+                        .WithMany("Teachers")
+                        .HasForeignKey("CnE")
+                        .IsRequired()
+                        .HasConstraintName("fk_teacher_employer");
+
+                    b.Navigation("CnENavigation");
+                });
+
+            modelBuilder.Entity("LimitationOnChoiceOfAudienceSubject", b =>
+                {
+                    b.HasOne("Domain.Entities.Classroom", null)
+                        .WithMany()
+                        .HasForeignKey("IdClassroom")
+                        .IsRequired()
+                        .HasConstraintName("fk_lim_classroom");
+
+                    b.HasOne("Domain.Entities.Subject", null)
+                        .WithMany()
+                        .HasForeignKey("IdSubject")
+                        .IsRequired()
+                        .HasConstraintName("fk_lim_subject");
+                });
+
+            modelBuilder.Entity("Domain.Entities.DayScheduleEntity", b =>
+                {
+                    b.Navigation("Lessons");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Employer", b =>
+                {
+                    b.Navigation("Teachers");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Group", b =>
+                {
+                    b.Navigation("Curators");
+
+                    b.Navigation("SubjectTeachers");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Schedule", b =>
+                {
+                    b.Navigation("Exam");
+
+                    b.Navigation("Okr");
+
+                    b.Navigation("RemovalAsFirst");
+
+                    b.Navigation("RemovalAsSecond");
+
+                    b.Navigation("SubjectTeacherSchedules");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Specialty", b =>
+                {
+                    b.Navigation("Groups");
+
+                    b.Navigation("Subjects");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Subject", b =>
+                {
+                    b.Navigation("SubjectTeachers");
+                });
+
+            modelBuilder.Entity("Domain.Entities.SubjectTeacher", b =>
+                {
+                    b.Navigation("SubjectTeacherSchedules");
+
+                    b.Navigation("Subjectteachersemesters");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Teacher", b =>
+                {
+                    b.Navigation("Curators");
+
+                    b.Navigation("Specialties");
+
+                    b.Navigation("SubjectTeachers");
+                });
+#pragma warning restore 612, 618
+        }
+    }
+        }
