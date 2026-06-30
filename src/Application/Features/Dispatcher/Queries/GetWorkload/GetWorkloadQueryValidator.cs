@@ -4,7 +4,7 @@ using FluentValidation;
 namespace Application.Features.Dispatcher.GetWorkload;
 
 public class GetWorkloadQueryValidator : AbstractValidator<GetWorkloadQuery>
-{
+    {
     public GetWorkloadQueryValidator()
     {
         RuleFor(x => x.Lesson)
@@ -28,4 +28,4 @@ public class GetWorkloadQueryValidator : AbstractValidator<GetWorkloadQuery>
             .GreaterThan(0).WithState(_ => ErrorCode.InvalidSemester)
             .WithMessage("Поле {PropertyName} должно быть больше 0");
     }
-}
+    }

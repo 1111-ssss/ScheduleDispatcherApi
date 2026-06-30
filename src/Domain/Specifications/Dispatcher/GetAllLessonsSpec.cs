@@ -4,7 +4,7 @@ using Domain.Entities;
 namespace Domain.Specifications.Dispatcher;
 
 public class GetAllLessonsSpec : Specification<Subject>
-{
+    {
     public GetAllLessonsSpec()
     {
         Query
@@ -14,4 +14,4 @@ public class GetAllLessonsSpec : Specification<Subject>
             .ThenInclude(x => x.Subjectteachersemesters)
             .AsNoTracking();
     }
-}
+    }

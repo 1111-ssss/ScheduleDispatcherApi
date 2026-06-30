@@ -6,7 +6,6 @@ public enum ErrorCode
 {
     Unknown = 0,
 
-    //Ошибки валидации (400 Bad Request)
     [HttpStatusCode(400)]
     BadRequest,
     [HttpStatusCode(400)]
@@ -34,7 +33,6 @@ public enum ErrorCode
     [HttpStatusCode(400)]
     InvalidSemester,
 
-    //Ошибки авторизации (401 Unauthorized)
     [HttpStatusCode(401)]
     Unauthorized,
     [HttpStatusCode(401)]
@@ -42,11 +40,9 @@ public enum ErrorCode
     [HttpStatusCode(401)]
     InvalidToken,
 
-    //Нет доступа (403 Forbidden)
     [HttpStatusCode(403)]
     Forbidden,
 
-    //Не найден (404 Not Found)
     [HttpStatusCode(404)]
     NotFound,
     [HttpStatusCode(404)]
@@ -54,13 +50,11 @@ public enum ErrorCode
     [HttpStatusCode(404)]
     TeacherNotFound,
 
-    //Ошибки конфликтации (409 Conflict)
     [HttpStatusCode(409)]
     Conflict,
     [HttpStatusCode(409)]
     UserAlreadyExists,
 
-    //Ошибка сервера (500 Internal Server Error)
     [HttpStatusCode(500)]
     InternalServerError,
     [HttpStatusCode(500)]

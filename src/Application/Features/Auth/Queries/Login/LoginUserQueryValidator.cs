@@ -4,7 +4,7 @@ using FluentValidation;
 namespace Application.Features.Auth.Login;
 
 public class LoginUserQueryValidator : AbstractValidator<LoginUserQuery>
-{
+    {
     public LoginUserQueryValidator()
     {
         RuleFor(x => x.Username)
@@ -27,4 +27,4 @@ public class LoginUserQueryValidator : AbstractValidator<LoginUserQuery>
             .Matches(@"^[\w!@#$%^&*()_+\-=\[\]{};':\\|,\.<>/?~`]+$").WithState(_ => ErrorCode.InvalidPassword)
             .WithMessage("Поле {PropertyName} должно содержать только буквы, цифры, знаки препинания, специальные символы и символы подчеркивания");
     }
-}
+    }

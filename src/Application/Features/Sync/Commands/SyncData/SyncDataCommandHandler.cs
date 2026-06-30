@@ -5,7 +5,7 @@ using MediatR;
 namespace Application.Features.Sync.SyncData;
 
 public class SyncDataCommandHandler : IRequestHandler<SyncDataCommand, Result>
-{
+    {
     private readonly IUnitOfWork _unitOfWork;
     public SyncDataCommandHandler(
         IUnitOfWork unitOfWork
@@ -18,6 +18,5 @@ public class SyncDataCommandHandler : IRequestHandler<SyncDataCommand, Result>
     {
         throw new NotImplementedException("Синхронизация с Единым Колледжем еще не реализована.");
 
-        // return Result.Success();
     }
-}
+    }

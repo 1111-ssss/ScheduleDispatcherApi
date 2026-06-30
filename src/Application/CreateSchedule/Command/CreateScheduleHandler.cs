@@ -1,11 +1,11 @@
-﻿using Contracts.Schedules;
+using Contracts.Schedules;
 using MassTransit;
 using MediatR;
 
 namespace Application.Features.CreateSchedule.Command;
 
 public class CreateScheduleHandler : IRequestHandler<DayScheduleDTO>
-{
+    {
     private readonly IPublishEndpoint _publishEndpoint; 
 
     public CreateScheduleHandler(IPublishEndpoint publishEndpoint)
@@ -18,4 +18,4 @@ public class CreateScheduleHandler : IRequestHandler<DayScheduleDTO>
         Console.WriteLine("хенд dispather");
         await _publishEndpoint.Publish(request, ct);
     }
-}
+    }

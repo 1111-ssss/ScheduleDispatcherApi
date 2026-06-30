@@ -1,7 +1,7 @@
 namespace Domain.Model.CustomException;
 
 public class CustomDbException : Exception
-{
+    {
     public string ErrorMessage { get; set; }
 
     public string SqlState { get; set; }
@@ -12,4 +12,4 @@ public class CustomDbException : Exception
         SqlState = sqlState;
     }
 
-}
+    }

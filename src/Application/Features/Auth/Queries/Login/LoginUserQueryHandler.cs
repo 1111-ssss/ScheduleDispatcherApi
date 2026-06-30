@@ -11,7 +11,7 @@ using MediatR;
 namespace Application.Features.Auth.Login;
 
 public class LoginUserQueryHandler : IRequestHandler<LoginUserQuery, Result<AuthDTO>>
-{
+    {
     private readonly IBaseRepository<User> _userRepository;
     private readonly IJwtGenerator _jwtGenerator;
     private readonly IPasswordHasher _passwordHasher;
@@ -48,4 +48,4 @@ public class LoginUserQueryHandler : IRequestHandler<LoginUserQuery, Result<Auth
             JwtToken: userJwt
         ));
     }
-}
+    }

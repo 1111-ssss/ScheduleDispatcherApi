@@ -8,7 +8,7 @@ using MediatR;
 namespace Application.Features.Auth.Refresh;
 
 public class RefreshTokenQueryHandler : IRequestHandler<RefreshTokenQuery, Result<AuthDTO>>
-{
+    {
     private readonly IJwtGenerator _jwtGenerator;
     private readonly ICurrentUserService _currentUserService;
 
@@ -43,4 +43,4 @@ public class RefreshTokenQueryHandler : IRequestHandler<RefreshTokenQuery, Resul
             JwtToken: newJwtToken
         ));
     }
-}
+    }

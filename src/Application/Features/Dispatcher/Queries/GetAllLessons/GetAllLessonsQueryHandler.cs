@@ -7,7 +7,7 @@ using Microsoft.Extensions.Logging;
 namespace Application.Features.Dispatcher.GetAllLessons;
 
 public class GetAllLessonsQueryHandler : IRequestHandler<GetAllLessonsQuery, Result<AllLessonsDTO>>
-{
+    {
     private readonly ILogger<GetAllLessonsQueryHandler> _logger;
     private readonly ISubjectRepository _subjectRepository;
 
@@ -30,4 +30,4 @@ public class GetAllLessonsQueryHandler : IRequestHandler<GetAllLessonsQuery, Res
             )
         );
     }
-}
+    }

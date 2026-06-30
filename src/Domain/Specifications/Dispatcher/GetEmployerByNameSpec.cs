@@ -4,7 +4,7 @@ using Domain.Entities;
 namespace Domain.Specifications.Dispatcher;
 
 public class GetEmployerByNameSpec : Specification<Employer>
-{
+    {
     public GetEmployerByNameSpec(string teacher)
     {
         Query.Where(e => (e.Surname + " " + e.Name.Substring(0, 1) + ". " + 
@@ -32,4 +32,4 @@ public class GetEmployerByNameSpec : Specification<Employer>
                                     .ThenInclude(s => s.RemovalAsSecond);
 
     }
-}
+    }
