@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Infrastructure.DataBase.Repository.Base;
 
 public class BaseRepository<T> : RepositoryBase<T>, IBaseRepository<T> where T : class
-{
+    {
     private readonly AppDbContext _db;
 
     private readonly DbSet<T> _dbSet;
@@ -15,4 +15,4 @@ public class BaseRepository<T> : RepositoryBase<T>, IBaseRepository<T> where T :
         _db = context;
         _dbSet = context.Set<T>();
     }
-}
+    }

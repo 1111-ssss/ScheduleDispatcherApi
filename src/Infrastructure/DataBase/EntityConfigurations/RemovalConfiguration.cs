@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 namespace Infrastructure.DataBase.EntityConfigurations;
 
 public class RemovalConfiguration : IEntityTypeConfiguration<Removal>
-{
+    {
     public void Configure(EntityTypeBuilder<Removal> entity)
     {
         entity.HasKey(e => e.IdRemoval).HasName("removal_pkey");
@@ -26,4 +26,4 @@ public class RemovalConfiguration : IEntityTypeConfiguration<Removal>
             .HasForeignKey<Removal>(d => d.IdSchedule2)
             .OnDelete(DeleteBehavior.ClientSetNull);
     }
-}
+    }

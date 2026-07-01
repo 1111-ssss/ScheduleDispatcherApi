@@ -1,16 +1,14 @@
-﻿using System;
+using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
 namespace Infrastructure.Migrations
-{
-    /// <inheritdoc />
-    public partial class draftSchedule : Migration
     {
-        /// <inheritdoc />
-        protected override void Up(MigrationBuilder migrationBuilder)
+        public partial class draftSchedule : Migration
+    {
+                protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
                 name: "fk_removal_sched1",
@@ -121,8 +119,7 @@ namespace Infrastructure.Migrations
                 principalColumn: "id_schedule");
         }
 
-        /// <inheritdoc />
-        protected override void Down(MigrationBuilder migrationBuilder)
+                protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
                 name: "FK_removal_schedule_IdSchedule1",
@@ -184,4 +181,4 @@ namespace Infrastructure.Migrations
                 principalColumn: "id_schedule");
         }
     }
-}
+        }

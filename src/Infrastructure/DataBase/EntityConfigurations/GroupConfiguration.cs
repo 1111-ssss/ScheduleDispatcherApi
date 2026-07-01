@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 namespace Infrastructure.DataBase.EntityConfigurations;
 
 public class GroupConfiguration : IEntityTypeConfiguration<Group>
-{
+    {
     public void Configure(EntityTypeBuilder<Group> entity)
     {
         entity.HasKey(e => e.CnG).HasName("group_pkey");
@@ -26,4 +26,4 @@ public class GroupConfiguration : IEntityTypeConfiguration<Group>
             .OnDelete(DeleteBehavior.ClientSetNull)
             .HasConstraintName("fk_group_specialty");
     }
-}
+    }

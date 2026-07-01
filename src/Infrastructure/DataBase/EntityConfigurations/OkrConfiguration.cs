@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 namespace Infrastructure.DataBase.EntityConfigurations;
 
 public class OkrConfiguration : IEntityTypeConfiguration<Okr>
-{
+    {
     public void Configure(EntityTypeBuilder<Okr> entity)
     {
         entity.HasKey(e => e.IdSchedule).HasName("okr_pkey");
@@ -21,4 +21,4 @@ public class OkrConfiguration : IEntityTypeConfiguration<Okr>
             .OnDelete(DeleteBehavior.ClientSetNull)
             .HasConstraintName("fk_okr_schedule");
     }
-}
+    }

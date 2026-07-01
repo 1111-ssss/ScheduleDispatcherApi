@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 namespace Infrastructure.DataBase.EntityConfigurations;
 
 public class SubjectConfiguration : IEntityTypeConfiguration<Subject>
-{
+    {
     public void Configure(EntityTypeBuilder<Subject> entity)
     {
         entity.HasKey(e => e.IdSubject).HasName("subject_pkey");
@@ -51,4 +51,4 @@ public class SubjectConfiguration : IEntityTypeConfiguration<Subject>
                     j.IndexerProperty<int>("IdClassroom").HasColumnName("id_classroom");
                 });
     }
-}
+    }
