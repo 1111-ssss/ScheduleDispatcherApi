@@ -5,10 +5,10 @@ using Microsoft.IdentityModel.Tokens;
 namespace API.Extensions;
 
 public static class AuthConfigurationExtensions
-{
+    {
     public static IServiceCollection AddAuthServices(this IServiceCollection services, IConfiguration configuration)
     {
-        // Authentication + Authorization
+        
         var jwtSettings = configuration.GetSection("Jwt");
         var key = Encoding.UTF8.GetBytes(jwtSettings["Key"] ?? throw new ArgumentNullException("Jwt:Key пустой в конфигурации"));
 
@@ -37,4 +37,4 @@ public static class AuthConfigurationExtensions
 
         return services;
     }
-}
+    }
