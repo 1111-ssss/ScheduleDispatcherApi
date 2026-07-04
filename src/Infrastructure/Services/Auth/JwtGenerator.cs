@@ -10,7 +10,7 @@ using System.Text;
 namespace Infrastructure.Services.Auth;
 
 public class JwtGenerator : IJwtGenerator
-{
+    {
     private readonly IConfiguration _config;
     private readonly ILogger<JwtGenerator> _logger;
     private readonly string _key;
@@ -53,4 +53,4 @@ public class JwtGenerator : IJwtGenerator
             return null;
         }
     }
-}
+    }

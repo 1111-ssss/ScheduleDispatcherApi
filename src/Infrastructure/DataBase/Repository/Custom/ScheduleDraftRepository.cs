@@ -1,4 +1,4 @@
-﻿using Application.Abstractions.Repository.Custom;
+using Application.Abstractions.Repository.Custom;
 using Ardalis.Specification;
 using Ardalis.Specification.EntityFrameworkCore;
 using Domain.Entities;
@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Infrastructure.DataBase.Repository.Custom;
 
 public class ScheduleDraftRepository : BaseRepository<DayScheduleEntity>, IScheduleDraftRepository
-{
+    {
     public ScheduleDraftRepository(AppDbContext dbContext) : base(dbContext) { }
 
     public async Task<DayScheduleEntity?> GetWithLessonsAsync(string groupName, DateOnly date, CancellationToken ct)
@@ -47,4 +47,4 @@ public class ScheduleDraftRepository : BaseRepository<DayScheduleEntity>, ISched
 
         await DbContext.SaveChangesAsync(ct);
     }
-}
+    }

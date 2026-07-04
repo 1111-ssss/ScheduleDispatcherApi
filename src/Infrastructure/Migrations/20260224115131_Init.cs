@@ -1,16 +1,14 @@
-﻿using System;
+using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
 namespace Infrastructure.Migrations
-{
-    /// <inheritdoc />
-    public partial class Init : Migration
     {
-        /// <inheritdoc />
-        protected override void Up(MigrationBuilder migrationBuilder)
+        public partial class Init : Migration
+    {
+                protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
                 name: "classrooms",
@@ -392,8 +390,7 @@ namespace Infrastructure.Migrations
                 column: "cn_e");
         }
 
-        /// <inheritdoc />
-        protected override void Down(MigrationBuilder migrationBuilder)
+                protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
                 name: "curator");
@@ -441,4 +438,4 @@ namespace Infrastructure.Migrations
                 name: "employer");
         }
     }
-}
+        }

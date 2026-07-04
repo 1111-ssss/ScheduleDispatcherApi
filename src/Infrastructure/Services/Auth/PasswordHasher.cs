@@ -8,7 +8,7 @@ using Domain.Model.Result;
 namespace Infrastructure.Services.Auth;
 
 public sealed class PasswordHasher : IPasswordHasher
-{
+    {
     private const int SaltLength = 16;
     private const int HashLength = 32;
     private const int MemoryCostKb = 64 * 1024;
@@ -69,4 +69,4 @@ public sealed class PasswordHasher : IPasswordHasher
             return Result.Failed(ErrorCode.InternalServerError, "Пароль либо логин неверный");
         }
     }
-}
+        }

@@ -8,7 +8,7 @@ namespace Application.Common.Behaviors;
 public class ValidationBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
 where TRequest : IRequest<TResponse>
 where TResponse : class, IResultBase
-{
+    {
     private readonly IEnumerable<IValidator<TRequest>> _validators;
     public ValidationBehavior(IEnumerable<IValidator<TRequest>> validators)
     {
@@ -55,4 +55,4 @@ where TResponse : class, IResultBase
 
         return (TResponse)(object)Result.Failed(errorCode, errorMessage, details);
     }
-}
+    }

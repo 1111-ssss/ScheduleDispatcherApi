@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 namespace Infrastructure.DataBase.EntityConfigurations;
 
 public class CuratorConfiguration : IEntityTypeConfiguration<Curator>
-{
+    {
     public void Configure(EntityTypeBuilder<Curator> entity)
     {
         entity.HasKey(e => e.IdCurator).HasName("curator_pkey");
@@ -32,4 +32,4 @@ public class CuratorConfiguration : IEntityTypeConfiguration<Curator>
             .OnDelete(DeleteBehavior.ClientSetNull)
             .HasConstraintName("fk_curator_teacher");
     }
-}
+    }

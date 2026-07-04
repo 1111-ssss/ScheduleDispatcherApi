@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 namespace Infrastructure.DataBase.EntityConfigurations;
 
 public class EmployerConfiguration : IEntityTypeConfiguration<Employer>
-{
+    {
     public void Configure(EntityTypeBuilder<Employer> entity)
     {
         entity.HasKey(e => e.CnE).HasName("employer_pkey");
@@ -25,4 +25,4 @@ public class EmployerConfiguration : IEntityTypeConfiguration<Employer>
             .HasMaxLength(35)
             .HasColumnName("surname");
     }
-}
+    }

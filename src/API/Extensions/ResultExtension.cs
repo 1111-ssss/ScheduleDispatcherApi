@@ -2,7 +2,7 @@ using Domain.Abstractions.Result;
 using Domain.Model.Result;
 
 public static class ResultExtensions
-{
+    {
     public static IResult ToApiResult(this IResultBase result)
     {
         if (result.IsSuccess)
@@ -37,4 +37,4 @@ public static class ResultExtensions
 
         return ((IResultBase)result).ToApiResult();
     }
-}
+    }

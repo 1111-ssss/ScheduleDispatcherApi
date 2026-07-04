@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 namespace API.Extensions;
 
 public static class MigrationExtensions
-{
+    {
     public static async Task<IHost> ApplyMigrationsAsync(this IHost host)
     {
         using var scope = host.Services.CreateScope();
@@ -13,7 +13,7 @@ public static class MigrationExtensions
         try
         {
             var context = services.GetRequiredService<AppDbContext>();
-            // Создаёт БД, если её нет, и применяет все незавершённые миграции.
+            
             await context.Database.MigrateAsync();
         }
         catch (Exception ex)
@@ -25,4 +25,4 @@ public static class MigrationExtensions
 
         return host;
     }
-}
+        }

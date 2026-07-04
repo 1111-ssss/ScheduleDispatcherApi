@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 namespace Infrastructure.DataBase.EntityConfigurations;
 
 public class ExamConfiguration : IEntityTypeConfiguration<Exam>
-{
+    {
     public void Configure(EntityTypeBuilder<Exam> entity)
     {
         entity.HasKey(e => e.IdSchedule).HasName("exam_pkey");
@@ -21,4 +21,4 @@ public class ExamConfiguration : IEntityTypeConfiguration<Exam>
             .OnDelete(DeleteBehavior.ClientSetNull)
             .HasConstraintName("fk_exam_schedule");
     }
-}
+    }

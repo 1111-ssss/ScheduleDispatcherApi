@@ -1,11 +1,11 @@
-﻿using Domain.Entities;
+using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Infrastructure.DataBase.EntityConfigurations;
 
 public class DayScheduleConfiguration : IEntityTypeConfiguration<DayScheduleEntity>
-{
+    {
     public void Configure(EntityTypeBuilder<DayScheduleEntity> builder)
     {
         builder.ToTable("day_schedule");
@@ -22,4 +22,4 @@ public class DayScheduleConfiguration : IEntityTypeConfiguration<DayScheduleEnti
                .HasForeignKey(x => x.Groupid)
                .OnDelete(DeleteBehavior.Cascade);
     }
-}
+    }

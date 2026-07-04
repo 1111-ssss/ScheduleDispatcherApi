@@ -4,7 +4,7 @@ namespace Domain.Model.Result;
 
 [AttributeUsage(AttributeTargets.Field)]
 public class HttpStatusCodeAttribute : Attribute
-{
+    {
     public int StatusCode { get; }
 
     public HttpStatusCodeAttribute(int statusCode)
@@ -25,4 +25,4 @@ public class HttpStatusCodeAttribute : Attribute
 
         return attr?.StatusCode ?? 400;
     }
-}
+    }

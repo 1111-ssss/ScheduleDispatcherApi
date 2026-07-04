@@ -3,7 +3,7 @@ using Domain.Abstractions.Result;
 namespace Domain.Model.Result;
 
 public sealed class Result : IResultBase
-{
+    {
     public bool IsSuccess => Error is null;
     public bool IsComplited => IsSuccess;
     public ErrorCode? Error { get; }
@@ -32,9 +32,9 @@ public sealed class Result : IResultBase
         string? message = null,
         Dictionary<string, string>? details = null
     ) => Failed(errorCode, message, details);
-}
+    }
 public sealed class Result<T> : IResultBase
-{
+    {
     public T Value { get; }
     public bool IsSuccess => Error is null;
     public bool IsComplited => IsSuccess;
@@ -65,4 +65,4 @@ public sealed class Result<T> : IResultBase
 
     public static Result<T> CompletedOperation(T value) => Success(value);
     public static Result<T> FailedOperation(ErrorCode errorCode, string? message = null, Dictionary<string, string>? details = null) => Failed(errorCode, message, details);
-}
+    }

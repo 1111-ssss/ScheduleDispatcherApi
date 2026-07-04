@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 namespace Infrastructure.DataBase.EntityConfigurations;
 
 public class SubjectTeacherConfiguration : IEntityTypeConfiguration<SubjectTeacher>
-{
+    {
     public void Configure(EntityTypeBuilder<SubjectTeacher> entity)
     {
         entity.HasKey(e => e.IdsubjectTeacher).HasName("subject_teacher_pkey");
@@ -38,4 +38,4 @@ public class SubjectTeacherConfiguration : IEntityTypeConfiguration<SubjectTeach
             .OnDelete(DeleteBehavior.ClientSetNull)
             .HasConstraintName("fk_subj_teacher_subject");
     }
-}
+    }

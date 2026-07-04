@@ -7,7 +7,7 @@ using Npgsql;
 namespace Infrastructure.UnitOfWork;
 
 public class UnitOfWork : IUnitOfWork
-{
+    {
     private readonly AppDbContext _db;
     public UnitOfWork(AppDbContext courceDbContext)
     {
@@ -28,4 +28,4 @@ public class UnitOfWork : IUnitOfWork
     {
         _db.Dispose();
     }
-}
+    }

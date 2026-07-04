@@ -10,17 +10,15 @@ using Microsoft.EntityFrameworkCore;
 namespace API.Extensions;
 
 public static class DatabaseConfigurationExtensions
-{
+    {
     public static IServiceCollection AddCustomDbContext(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddDbContext<AppDbContext>(options =>
             options.UseNpgsql(configuration.GetConnectionString("DefaultConnection"))
         );
 
-        // UnitOfWork
         services.AddScoped<IUnitOfWork, UnitOfWork>();
 
-        // Repository
         services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
         services.AddScoped<IScheduleDraftRepository, ScheduleDraftRepository>();
 
@@ -28,4 +26,4 @@ public static class DatabaseConfigurationExtensions
 
         return services;
     }
-}
+    }
