@@ -56,7 +56,7 @@ public class SaveWorkloadCommandHandlerTests
     [Fact]
     public async Task Handle_ShouldReturnSuccess_WhenValidDataProvided()
     {
-        // Arrange
+        
         var employer = CreateEmployer();
         _employerRepositoryMock
             .Setup(r => r.FirstOrDefaultAsync(It.IsAny<GetWorkloadSpec>(), It.IsAny<CancellationToken>()))
@@ -84,11 +84,9 @@ public class SaveWorkloadCommandHandlerTests
 
         var command = new SaveWorkloadCommand("Базы данных", "Иванов И. И.", "П21", 1, workloadSummary);
 
-        // Act
-        var result = await _handler.Handle(command, CancellationToken.None);
+var result = await _handler.Handle(command, CancellationToken.None);
 
-        // Assert
-        result.IsSuccess.Should().BeTrue();
+result.IsSuccess.Should().BeTrue();
         _scheduleRepositoryMock.Verify(r => r.AddAsync(It.IsAny<Schedule>(), It.IsAny<CancellationToken>()), Times.Once);
         _stsRepositoryMock.Verify(r => r.AddAsync(It.IsAny<SubjectTeacherSchedule>(), It.IsAny<CancellationToken>()), Times.Once);
     }
@@ -96,7 +94,7 @@ public class SaveWorkloadCommandHandlerTests
     [Fact]
     public async Task Handle_ShouldReturnFailed_WhenTeacherNotFound()
     {
-        // Arrange
+        
         _employerRepositoryMock
             .Setup(r => r.FirstOrDefaultAsync(It.IsAny<GetWorkloadSpec>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync((Employer?)null);
@@ -111,25 +109,22 @@ public class SaveWorkloadCommandHandlerTests
 
         var command = new SaveWorkloadCommand("Базы данных", "Неexistent Teacher", "П21", 1, workloadSummary);
 
-        // Act
-        var result = await _handler.Handle(command, CancellationToken.None);
+var result = await _handler.Handle(command, CancellationToken.None);
 
-        // Assert
-        result.IsSuccess.Should().BeFalse();
+result.IsSuccess.Should().BeFalse();
         result.Message.Should().Be("Преподаватель не найден");
     }
 
     [Fact]
     public async Task Handle_ShouldReturnFailed_WhenLessonNotFound()
     {
-        // Arrange
+        
         var employer = CreateEmployer();
         _employerRepositoryMock
             .Setup(r => r.FirstOrDefaultAsync(It.IsAny<GetWorkloadSpec>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(employer);
 
-        // Предмета нет в справочнике — линк создать не из чего.
-        _subjectRepositoryMock
+_subjectRepositoryMock
             .Setup(r => r.FirstOrDefaultAsync(It.IsAny<SubjectByNameSpec>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync((Subject?)null);
 
@@ -147,18 +142,16 @@ public class SaveWorkloadCommandHandlerTests
 
         var command = new SaveWorkloadCommand("Несуществующая дисциплина", "Иванов И. И.", "П21", 1, workloadSummary);
 
-        // Act
-        var result = await _handler.Handle(command, CancellationToken.None);
+var result = await _handler.Handle(command, CancellationToken.None);
 
-        // Assert
-        result.IsSuccess.Should().BeFalse();
+result.IsSuccess.Should().BeFalse();
         result.Message.Should().Be("Дисциплина не найдена.");
     }
 
     [Fact]
     public async Task Handle_ShouldDeleteExistingSchedules_WhenSavingNewWorkload()
     {
-        // Arrange
+        
         var employer = CreateEmployer();
         _employerRepositoryMock
             .Setup(r => r.FirstOrDefaultAsync(It.IsAny<GetWorkloadSpec>(), It.IsAny<CancellationToken>()))
@@ -186,11 +179,9 @@ public class SaveWorkloadCommandHandlerTests
 
         var command = new SaveWorkloadCommand("Базы данных", "Иванов И. И.", "П21", 1, workloadSummary);
 
-        // Act
-        var result = await _handler.Handle(command, CancellationToken.None);
+var result = await _handler.Handle(command, CancellationToken.None);
 
-        // Assert
-        result.IsSuccess.Should().BeTrue();
+result.IsSuccess.Should().BeTrue();
         _stsRepositoryMock.Verify(r => r.DeleteAsync(It.IsAny<SubjectTeacherSchedule>(), It.IsAny<CancellationToken>()), Times.Once);
         _scheduleRepositoryMock.Verify(r => r.DeleteAsync(It.IsAny<Schedule>(), It.IsAny<CancellationToken>()), Times.Once);
     }
@@ -198,7 +189,7 @@ public class SaveWorkloadCommandHandlerTests
     [Fact]
     public async Task Handle_ShouldCreateMultipleSchedules_WhenMultipleWorkloadItemsProvided()
     {
-        // Arrange
+        
         var employer = CreateEmployer();
         _employerRepositoryMock
             .Setup(r => r.FirstOrDefaultAsync(It.IsAny<GetWorkloadSpec>(), It.IsAny<CancellationToken>()))
@@ -229,11 +220,9 @@ public class SaveWorkloadCommandHandlerTests
 
         var command = new SaveWorkloadCommand("Базы данных", "Иванов И. И.", "П21", 1, workloadSummary);
 
-        // Act
-        var result = await _handler.Handle(command, CancellationToken.None);
+var result = await _handler.Handle(command, CancellationToken.None);
 
-        // Assert
-        result.IsSuccess.Should().BeTrue();
+result.IsSuccess.Should().BeTrue();
         _scheduleRepositoryMock.Verify(r => r.AddAsync(It.IsAny<Schedule>(), It.IsAny<CancellationToken>()), Times.Exactly(3));
         _stsRepositoryMock.Verify(r => r.AddAsync(It.IsAny<SubjectTeacherSchedule>(), It.IsAny<CancellationToken>()), Times.Exactly(3));
     }
@@ -241,7 +230,7 @@ public class SaveWorkloadCommandHandlerTests
     [Fact]
     public async Task Handle_ShouldHandleSplitLesson_WhenIsLessonSplitIsTrue()
     {
-        // Arrange
+        
         var employer = CreateEmployer();
         _employerRepositoryMock
             .Setup(r => r.FirstOrDefaultAsync(It.IsAny<GetWorkloadSpec>(), It.IsAny<CancellationToken>()))
@@ -271,11 +260,9 @@ public class SaveWorkloadCommandHandlerTests
 
         var command = new SaveWorkloadCommand("Базы данных", "Иванов И. И.", "П21", 1, workloadSummary);
 
-        // Act
-        var result = await _handler.Handle(command, CancellationToken.None);
+var result = await _handler.Handle(command, CancellationToken.None);
 
-        // Assert
-        result.IsSuccess.Should().BeTrue();
+result.IsSuccess.Should().BeTrue();
         createdSchedule.Should().NotBeNull();
         createdSchedule!.IsPractical.Should().BeTrue();
     }
@@ -283,9 +270,8 @@ public class SaveWorkloadCommandHandlerTests
     [Fact]
     public async Task Handle_ShouldPersistRemoval_ByLessonIndex()
     {
-        // Arrange: уроки с номерами 3 и 4, снятие (1, 3, 4) ссылается на НОМЕРА,
-        // а не на позиции в списке.
-        var employer = CreateEmployer();
+
+var employer = CreateEmployer();
         _employerRepositoryMock
             .Setup(r => r.FirstOrDefaultAsync(It.IsAny<GetWorkloadSpec>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(employer);
@@ -325,11 +311,9 @@ public class SaveWorkloadCommandHandlerTests
 
         var command = new SaveWorkloadCommand("Базы данных", "Иванов И. И.", "П21", 1, workloadSummary);
 
-        // Act
-        var result = await _handler.Handle(command, CancellationToken.None);
+var result = await _handler.Handle(command, CancellationToken.None);
 
-        // Assert
-        result.IsSuccess.Should().BeTrue();
+result.IsSuccess.Should().BeTrue();
         savedRemoval.Should().NotBeNull();
         savedRemoval!.IdSchedule1.Should().Be(created[0].IdSchedule);
         savedRemoval.IdSchedule2.Should().Be(created[1].IdSchedule);
@@ -340,7 +324,7 @@ public class SaveWorkloadCommandHandlerTests
     [Fact]
     public async Task Handle_ShouldAcceptNullDates_ForUndatedLessons()
     {
-        // Arrange: хвост связки без дат (десктоп датирует при публикации).
+        
         var employer = CreateEmployer();
         _employerRepositoryMock
             .Setup(r => r.FirstOrDefaultAsync(It.IsAny<GetWorkloadSpec>(), It.IsAny<CancellationToken>()))
@@ -370,11 +354,9 @@ public class SaveWorkloadCommandHandlerTests
 
         var command = new SaveWorkloadCommand("Базы данных", "Иванов И. И.", "П21", 1, workloadSummary);
 
-        // Act
-        var result = await _handler.Handle(command, CancellationToken.None);
+var result = await _handler.Handle(command, CancellationToken.None);
 
-        // Assert
-        result.IsSuccess.Should().BeTrue();
+result.IsSuccess.Should().BeTrue();
         createdSchedule.Should().NotBeNull();
         createdSchedule!.Date1.Should().BeNull();
         createdSchedule.Date2.Should().BeNull();
@@ -383,7 +365,7 @@ public class SaveWorkloadCommandHandlerTests
     [Fact]
     public async Task Handle_ShouldPersistLessonType_OnSchedule()
     {
-        // Arrange
+        
         var employer = CreateEmployer();
         _employerRepositoryMock
             .Setup(r => r.FirstOrDefaultAsync(It.IsAny<GetWorkloadSpec>(), It.IsAny<CancellationToken>()))
@@ -413,11 +395,9 @@ public class SaveWorkloadCommandHandlerTests
 
         var command = new SaveWorkloadCommand("Базы данных", "Иванов И. И.", "П21", 1, workloadSummary);
 
-        // Act
-        var result = await _handler.Handle(command, CancellationToken.None);
+var result = await _handler.Handle(command, CancellationToken.None);
 
-        // Assert
-        result.IsSuccess.Should().BeTrue();
+result.IsSuccess.Should().BeTrue();
         createdSchedule.Should().NotBeNull();
         createdSchedule!.LessonType.Should().Be("Лабораторная");
     }
@@ -425,7 +405,7 @@ public class SaveWorkloadCommandHandlerTests
     [Fact]
     public async Task Handle_ShouldReturnDatabaseError_WhenExceptionOccurs()
     {
-        // Arrange
+        
         var employer = CreateEmployer();
         _employerRepositoryMock
             .Setup(r => r.FirstOrDefaultAsync(It.IsAny<GetWorkloadSpec>(), It.IsAny<CancellationToken>()))
@@ -445,11 +425,9 @@ public class SaveWorkloadCommandHandlerTests
 
         var command = new SaveWorkloadCommand("Базы данных", "Иванов И. И.", "П21", 1, workloadSummary);
 
-        // Act
-        var result = await _handler.Handle(command, CancellationToken.None);
+var result = await _handler.Handle(command, CancellationToken.None);
 
-        // Assert
-        result.IsSuccess.Should().BeFalse();
+result.IsSuccess.Should().BeFalse();
         result.Message.Should().Be("Ошибка БД");
         _loggerMock.Verify(
             x => x.Log(
@@ -464,9 +442,8 @@ public class SaveWorkloadCommandHandlerTests
     [Fact]
     public async Task Handle_ShouldCreateLink_WhenReplacementTeacherHasNoBinding()
     {
-        // Замена: учитель предмет в группе не ведёт (связки нет),
-        // но предмет и группа существуют — линк создаётся, факт сохраняется.
-        var employer = CreateEmployerWithoutLink();
+
+var employer = CreateEmployerWithoutLink();
         _employerRepositoryMock
             .Setup(r => r.FirstOrDefaultAsync(It.IsAny<GetWorkloadSpec>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(employer);
@@ -521,11 +498,9 @@ public class SaveWorkloadCommandHandlerTests
 
         var command = new SaveWorkloadCommand("Базы данных", "Иванов И. И.", "П21", 1, workloadSummary);
 
-        // Act
-        var result = await _handler.Handle(command, CancellationToken.None);
+var result = await _handler.Handle(command, CancellationToken.None);
 
-        // Assert
-        result.IsSuccess.Should().BeTrue();
+result.IsSuccess.Should().BeTrue();
         _linkRepositoryMock.Verify(
             r => r.AddAsync(It.Is<SubjectTeacher>(st => st.IdSubject == 5 && st.CnG == "П21" && st.CnT == "T001"),
                 It.IsAny<CancellationToken>()),

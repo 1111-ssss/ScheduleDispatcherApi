@@ -28,7 +28,7 @@ public class GetWorkloadQueryTests : IDisposable
     [Fact]
     public async Task Handle_ShouldReturnWorkload_WhenDataExists()
     {
-        // Arrange
+        
         await using var context = _fixture.CreateContext(_dbName);
         _fixture.Seed(context);
 
@@ -59,11 +59,9 @@ public class GetWorkloadQueryTests : IDisposable
         var handler = new GetWorkloadQueryHandler(loggerMock.Object, employerRepository);
         var query = new GetWorkloadQuery("Базы данных", "Иванов И. И.", "П21", 1);
 
-        // Act
-        var result = await handler.Handle(query, CancellationToken.None);
+var result = await handler.Handle(query, CancellationToken.None);
 
-        // Assert
-        result.IsSuccess.Should().BeTrue();
+result.IsSuccess.Should().BeTrue();
         result.Value.Should().NotBeNull();
         result.Value.WorkloadList.Should().NotBeEmpty();
     }
@@ -71,7 +69,7 @@ public class GetWorkloadQueryTests : IDisposable
     [Fact]
     public async Task Handle_ShouldReturnEmpty_WhenTeacherNotFound()
     {
-        // Arrange
+        
         await using var context = _fixture.CreateContext(_dbName);
         _fixture.Seed(context);
 
@@ -81,11 +79,9 @@ public class GetWorkloadQueryTests : IDisposable
         var handler = new GetWorkloadQueryHandler(loggerMock.Object, employerRepository);
         var query = new GetWorkloadQuery("Базы данных", "Неexistent Teacher", "П21", 1);
 
-        // Act
-        var result = await handler.Handle(query, CancellationToken.None);
+var result = await handler.Handle(query, CancellationToken.None);
 
-        // Assert
-        result.IsSuccess.Should().BeTrue();
+result.IsSuccess.Should().BeTrue();
         result.Value.Should().NotBeNull();
         result.Value.WorkloadList.Should().BeEmpty();
         result.Value.RemovalList.Should().BeEmpty();
@@ -94,7 +90,7 @@ public class GetWorkloadQueryTests : IDisposable
     [Fact]
     public async Task Handle_ShouldReturnCorrectWorkloadCount_WhenFilteredByGroup()
     {
-        // Arrange
+        
         await using var context = _fixture.CreateContext(_dbName);
         _fixture.Seed(context);
 
@@ -104,11 +100,9 @@ public class GetWorkloadQueryTests : IDisposable
         var handler = new GetWorkloadQueryHandler(loggerMock.Object, employerRepository);
         var query = new GetWorkloadQuery("Базы данных", "Иванов И. И.", "П21", 1);
 
-        // Act
-        var result = await handler.Handle(query, CancellationToken.None);
+var result = await handler.Handle(query, CancellationToken.None);
 
-        // Assert
-        result.IsSuccess.Should().BeTrue();
+result.IsSuccess.Should().BeTrue();
         result.Value.WorkloadList.Should().HaveCount(1);
 
         var workload = result.Value.WorkloadList.First();
@@ -122,7 +116,7 @@ public class GetWorkloadQueryTests : IDisposable
     [Fact]
     public async Task Handle_ShouldReturnRemovals_WhenSchedulesHaveRemovals()
     {
-        // Arrange
+        
         await using var context = _fixture.CreateContext(_dbName);
         _fixture.Seed(context);
 
@@ -132,11 +126,9 @@ public class GetWorkloadQueryTests : IDisposable
         var handler = new GetWorkloadQueryHandler(loggerMock.Object, employerRepository);
         var query = new GetWorkloadQuery("Базы данных", "Иванов И. И.", "П21", 1);
 
-        // Act
-        var result = await handler.Handle(query, CancellationToken.None);
+var result = await handler.Handle(query, CancellationToken.None);
 
-        // Assert
-        result.IsSuccess.Should().BeTrue();
+result.IsSuccess.Should().BeTrue();
         result.Value.RemovalList.Should().NotBeEmpty();
 
         var removal = result.Value.RemovalList.First();
@@ -148,7 +140,7 @@ public class GetWorkloadQueryTests : IDisposable
     [Fact]
     public async Task Handle_ShouldReturnWorkloadForSecondSemester_WhenSemester2IsTrue()
     {
-        // Arrange
+        
         await using var context = _fixture.CreateContext(_dbName);
         _fixture.Seed(context);
 
@@ -158,11 +150,9 @@ public class GetWorkloadQueryTests : IDisposable
         var handler = new GetWorkloadQueryHandler(loggerMock.Object, employerRepository);
         var query = new GetWorkloadQuery("Базы данных", "Иванов И. И.", "П22", 2);
 
-        // Act
-        var result = await handler.Handle(query, CancellationToken.None);
+var result = await handler.Handle(query, CancellationToken.None);
 
-        // Assert
-        result.IsSuccess.Should().BeTrue();
+result.IsSuccess.Should().BeTrue();
         result.Value.WorkloadList.Should().NotBeEmpty();
 
         var workload = result.Value.WorkloadList.First();
@@ -175,7 +165,7 @@ public class GetWorkloadQueryTests : IDisposable
     [Fact]
     public async Task Handle_ShouldReturnEmpty_WhenGroupNotFound()
     {
-        // Arrange
+        
         await using var context = _fixture.CreateContext(_dbName);
         _fixture.Seed(context);
 
@@ -185,11 +175,9 @@ public class GetWorkloadQueryTests : IDisposable
         var handler = new GetWorkloadQueryHandler(loggerMock.Object, employerRepository);
         var query = new GetWorkloadQuery("Базы данных", "Иванов И. И.", "Щ01", 1);
 
-        // Act
-        var result = await handler.Handle(query, CancellationToken.None);
+var result = await handler.Handle(query, CancellationToken.None);
 
-        // Assert
-        result.IsSuccess.Should().BeTrue();
+result.IsSuccess.Should().BeTrue();
         result.Value.WorkloadList.Should().BeEmpty();
         result.Value.RemovalList.Should().BeEmpty();
     }
@@ -197,7 +185,7 @@ public class GetWorkloadQueryTests : IDisposable
     [Fact]
     public async Task Handle_ShouldReturnEmpty_WhenLessonNotFound()
     {
-        // Arrange
+        
         await using var context = _fixture.CreateContext(_dbName);
         _fixture.Seed(context);
 
@@ -207,11 +195,9 @@ public class GetWorkloadQueryTests : IDisposable
         var handler = new GetWorkloadQueryHandler(loggerMock.Object, employerRepository);
         var query = new GetWorkloadQuery("Иванов И. И.", "T001", "П21", 1);
 
-        // Act
-        var result = await handler.Handle(query, CancellationToken.None);
+var result = await handler.Handle(query, CancellationToken.None);
 
-        // Assert
-        result.IsSuccess.Should().BeTrue();
+result.IsSuccess.Should().BeTrue();
     }
 
     public void Dispose()

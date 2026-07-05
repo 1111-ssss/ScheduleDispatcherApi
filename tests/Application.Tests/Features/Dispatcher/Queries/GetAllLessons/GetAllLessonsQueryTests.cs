@@ -26,7 +26,7 @@ public class GetAllLessonsQueryTests : IDisposable
     [Fact]
     public async Task Handle_ShouldReturnAllLessons_WhenSubjectsExist()
     {
-        // Arrange
+        
         await using var context = _fixture.CreateContext(_dbName);
         _fixture.Seed(context);
 
@@ -36,11 +36,9 @@ public class GetAllLessonsQueryTests : IDisposable
         var handler = new GetAllLessonsQueryHandler(loggerMock.Object, subjectRepository);
         var query = new GetAllLessonsQuery();
 
-        // Act
-        var result = await handler.Handle(query, CancellationToken.None);
+var result = await handler.Handle(query, CancellationToken.None);
 
-        // Assert
-        result.IsSuccess.Should().BeTrue();
+result.IsSuccess.Should().BeTrue();
         result.Value.Should().NotBeNull();
         result.Value.Lessons.Should().HaveCount(3);
 
@@ -55,7 +53,7 @@ public class GetAllLessonsQueryTests : IDisposable
     [Fact]
     public async Task Handle_ShouldReturnEmptyList_WhenNoSubjects()
     {
-        // Arrange
+        
         await using var context = _fixture.CreateContext(_dbName);
 
         var subjectRepository = new SubjectRepository(context, new BaseRepository<Subject>(context));
@@ -64,18 +62,16 @@ public class GetAllLessonsQueryTests : IDisposable
         var handler = new GetAllLessonsQueryHandler(loggerMock.Object, subjectRepository);
         var query = new GetAllLessonsQuery();
 
-        // Act
-        var result = await handler.Handle(query, CancellationToken.None);
+var result = await handler.Handle(query, CancellationToken.None);
 
-        // Assert
-        result.IsSuccess.Should().BeTrue();
+result.IsSuccess.Should().BeTrue();
         result.Value.Lessons.Should().BeEmpty();
     }
 
     [Fact]
     public async Task Handle_ShouldGroupGroupsBySpecialty_WhenMultipleGroupsExist()
     {
-        // Arrange
+        
         await using var context = _fixture.CreateContext(_dbName);
         _fixture.Seed(context);
 
@@ -85,14 +81,11 @@ public class GetAllLessonsQueryTests : IDisposable
         var handler = new GetAllLessonsQueryHandler(loggerMock.Object, subjectRepository);
         var query = new GetAllLessonsQuery();
 
-        // Act
-        var result = await handler.Handle(query, CancellationToken.None);
+var result = await handler.Handle(query, CancellationToken.None);
 
-        // Assert
-        result.IsSuccess.Should().BeTrue();
+result.IsSuccess.Should().BeTrue();
 
-        // Output
-        int outputCounter = 0;
+int outputCounter = 0;
         _output.WriteLine($"Result: {result.Value}, Lessons count: {result.Value.Lessons.Count()}");
         foreach (var lesson in result.Value.Lessons)
         {
@@ -105,9 +98,8 @@ public class GetAllLessonsQueryTests : IDisposable
             if (outputCounter == 4)
                 return;
         }
-        // Output end
 
-        var webDevLesson = result.Value.Lessons.FirstOrDefault(l => l.LessonName == "Веб-программирование");
+var webDevLesson = result.Value.Lessons.FirstOrDefault(l => l.LessonName == "Веб-программирование");
         webDevLesson.Should().NotBeNull();
 
         var groupsDict = webDevLesson!.Groups;
