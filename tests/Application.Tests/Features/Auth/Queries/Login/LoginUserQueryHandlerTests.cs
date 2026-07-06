@@ -27,7 +27,7 @@ public class LoginUserQueryHandlerTests
     [Fact]
     public async Task Handle_UserNotFound_ReturnsInvalidCredentialsError()
     {
-        // Arrange
+        
         var query = new LoginUserQuery("nonexistent", "any");
 
         _userRepoMock
@@ -36,18 +36,16 @@ public class LoginUserQueryHandlerTests
 
         var sut = CreateSut();
 
-        // Act
-        var result = await sut.Handle(query, CancellationToken.None);
+var result = await sut.Handle(query, CancellationToken.None);
 
-        // Assert
-        result.IsSuccess.Should().BeFalse();
+result.IsSuccess.Should().BeFalse();
         result.Error.Should().Be(ErrorCode.InvalidUsernameOrPassword);
     }
 
     [Fact]
     public async Task Handle_PasswordIncorrect_ReturnsInvalidCredentialsError()
     {
-        // Arrange
+        
         var query = new LoginUserQuery("testuser", "wrongpass");
 
         var user = CreateValidUser();
@@ -62,18 +60,16 @@ public class LoginUserQueryHandlerTests
 
         var sut = CreateSut();
 
-        // Act
-        var result = await sut.Handle(query, CancellationToken.None);
+var result = await sut.Handle(query, CancellationToken.None);
 
-        // Assert
-        result.IsSuccess.Should().BeFalse();
+result.IsSuccess.Should().BeFalse();
         result.Error.Should().Be(ErrorCode.InvalidUsernameOrPassword);
     }
 
     [Fact]
     public async Task Handle_JwtGenerationFailed_ReturnsTokenGenerationError()
     {
-        // Arrange
+        
         var query = new LoginUserQuery("testuser", "correct");
 
         var user = CreateValidUser();
@@ -92,18 +88,16 @@ public class LoginUserQueryHandlerTests
 
         var sut = CreateSut();
 
-        // Act
-        var result = await sut.Handle(query, CancellationToken.None);
+var result = await sut.Handle(query, CancellationToken.None);
 
-        // Assert
-        result.IsSuccess.Should().BeFalse();
+result.IsSuccess.Should().BeFalse();
         result.Error.Should().Be(ErrorCode.TokenGenerationError);
     }
 
     [Fact]
     public async Task Handle_ValidCredentials_ReturnsSuccessWithToken()
     {
-        // Arrange
+        
         var query = new LoginUserQuery("testuser", "correct");
         const string expectedToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...";
 
@@ -125,17 +119,14 @@ public class LoginUserQueryHandlerTests
 
         var sut = CreateSut();
 
-        // Act
-        var result = await sut.Handle(query, CancellationToken.None);
+var result = await sut.Handle(query, CancellationToken.None);
 
-        // Assert
-        result.IsSuccess.Should().BeTrue();
+result.IsSuccess.Should().BeTrue();
         result.Value.Should().NotBeNull();
         result.Value.JwtToken.Should().Be(expectedToken);
     }
 
-    // Helpers
-    private static User CreateValidUser()
+private static User CreateValidUser()
     {
         return new User
         {
