@@ -540,3 +540,8 @@ FodyWeavers.xsd
 # Additional files built by Visual Studio
 
 # End of https://www.toptal.com/developers/gitignore/api/visualstudio,visualstudiocode,aspnetcore
+
+# Local dev artifacts (not for repo)
+postman/
+scripts/
+src/API/appsettings.Development.json
