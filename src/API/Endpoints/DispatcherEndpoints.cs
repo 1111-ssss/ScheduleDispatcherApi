@@ -4,6 +4,7 @@ using Domain.Model.Result;
 using Application.Features.Dispatcher.GetWorkload;
 using Application.Features.Dispatcher.Common;
 using Application.Features.Dispatcher.SaveWorkload;
+using Application.Features.Dispatcher.Commands.SaveDraftSchedule;
 using Application.Features.Dispatcher.FinalizeDaySchedule;
 using Application.Features.Dispatcher.GetAllLessons;
 
@@ -44,6 +45,15 @@ public static class DispatcherEndpoints
             .Produces<ErrorResponse>(StatusCodes.Status400BadRequest)
             .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
 
+        group.MapPost("/draft", SaveDraftScheduleAsync)
+            .WithSummary("Запрос на сохранение черновика расписания дня")
+            .WithDescription("Позволяет сохранить черновик расписания дня для группы на определенный день. Если день уже существует, его уроки заменяются.")
+            .WithName("Save Draft Schedule")
+            .Accepts<SaveDraftScheduleCommand>("application/json")
+            .Produces(StatusCodes.Status200OK)
+            .Produces<ErrorResponse>(StatusCodes.Status400BadRequest)
+            .Produces<ErrorResponse>(StatusCodes.Status500InternalServerError);
+
         group.MapGet("/lessons", GetAllLessonsAsync)
             .WithSummary("Запрос на получение информации о предметах")
             .WithDescription("Позволяет получить информацию о предметах, в каком семестре они проводятся, на каком курсу и списку групп.")
@@ -74,6 +84,15 @@ public static class DispatcherEndpoints
     private static async Task<IResult> FinalizeDayScheduleAsync(
         [FromServices] IMediator _mediator,
         [FromBody] FinalizeDayScheduleCommand command
+    )
+    {
+        var result = await _mediator.Send(command);
+
+        return result.ToApiResult();
+    }
+    private static async Task<IResult> SaveDraftScheduleAsync(
+        [FromServices] IMediator _mediator,
+        [FromBody] SaveDraftScheduleCommand command
     )
     {
         var result = await _mediator.Send(command);
