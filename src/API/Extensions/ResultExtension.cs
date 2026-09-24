@@ -5,6 +5,9 @@ public static class ResultExtensions
 {
     public static IResult ToApiResult(this IResultBase result)
     {
+        if (result.IsSuccess)
+            return Results.Ok();
+
         if (!result.Error.HasValue)
             return Results.BadRequest(new { message = result.Message ?? "Unknown error" });
 
