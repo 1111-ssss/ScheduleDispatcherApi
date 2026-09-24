@@ -16,6 +16,8 @@ builder.Services.AddMessaging(builder.Configuration);
 
 var app = builder.Build();
 
+await app.ApplyMigrationsAsync();
+
 app.UseCustomMiddleware();
 app.UseRateLimiter();
 
